@@ -3,20 +3,17 @@ using System.Collections.Generic;
 
 namespace CariBengkel.Repository.Entity.Model
 {
-    public partial class Owner
+    public partial class Sparepart
     {
-        public Owner()
-        {
-            OwnerStore = new HashSet<OwnerStore>();
-        }
-
         public long Id { get; set; }
-        public string Code { get; set; }
         public string Name { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
-        public string IdentityNumber { get; set; }
-        public int IdentityType { get; set; }
+        public string Description { get; set; }
+        public string Code { get; set; }
+        public int Stock { get; set; }
+        public decimal Price { get; set; }
+        public long IdStore { get; set; }
+        public long IdVehicleType { get; set; }
+        public long IdMerk { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string CreatedHost { get; set; }
@@ -24,6 +21,6 @@ namespace CariBengkel.Repository.Entity.Model
         public DateTime? ModifiedOn { get; set; }
         public string ModifiedHost { get; set; }
 
-        public virtual ICollection<OwnerStore> OwnerStore { get; set; }
+        public virtual OwnerStore IdStoreNavigation { get; set; }
     }
 }
