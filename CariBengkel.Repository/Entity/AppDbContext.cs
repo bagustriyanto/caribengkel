@@ -15,10 +15,13 @@ namespace CariBengkel.Repository.Entity.Model
         {
         }
 
+        public virtual DbSet<Credentials> Credentials { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<Owner> Owner { get; set; }
         public virtual DbSet<OwnerStore> OwnerStore { get; set; }
         public virtual DbSet<Parameter> Parameter { get; set; }
+        public virtual DbSet<Role> Role { get; set; }
+        public virtual DbSet<RoleMap> RoleMap { get; set; }
         public virtual DbSet<Service> Service { get; set; }
         public virtual DbSet<ServicePackage> ServicePackage { get; set; }
         public virtual DbSet<ServicePackageDetail> ServicePackageDetail { get; set; }
@@ -37,6 +40,32 @@ namespace CariBengkel.Repository.Entity.Model
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.0-rtm-35687");
+
+            modelBuilder.Entity<Credentials>(entity =>
+            {
+                entity.ToTable("credentials");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .UseNpgsqlIdentityByDefaultColumn();
+
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasColumnName("email")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasColumnName("password")
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.Status).HasColumnName("status");
+
+                entity.Property(e => e.Username)
+                    .IsRequired()
+                    .HasColumnName("username")
+                    .HasMaxLength(50);
+            });
 
             modelBuilder.Entity<Customer>(entity =>
             {
@@ -250,6 +279,47 @@ namespace CariBengkel.Repository.Entity.Model
                     .IsRequired()
                     .HasColumnName("name")
                     .HasMaxLength(100);
+            });
+
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.ToTable("role");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .UseNpgsqlIdentityByDefaultColumn();
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasColumnName("name")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Status).HasColumnName("status");
+            });
+
+            modelBuilder.Entity<RoleMap>(entity =>
+            {
+                entity.ToTable("role_map");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .UseNpgsqlIdentityByDefaultColumn();
+
+                entity.Property(e => e.CredentialId).HasColumnName("credential_id");
+
+                entity.Property(e => e.RoleId).HasColumnName("role_id");
+
+                entity.HasOne(d => d.Credential)
+                    .WithMany(p => p.RoleMap)
+                    .HasForeignKey(d => d.CredentialId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("role_map_credentials_fk");
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.RoleMap)
+                    .HasForeignKey(d => d.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("role_map_role_fk");
             });
 
             modelBuilder.Entity<Service>(entity =>
