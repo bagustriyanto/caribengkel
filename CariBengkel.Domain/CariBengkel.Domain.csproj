@@ -2,10 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CariBengkel.Repository\CariBengkel.Repository.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <ProjectReference Include="..\CariBengkel.Common\CariBengkel.Common.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
