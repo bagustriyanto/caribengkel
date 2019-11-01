@@ -2,16 +2,17 @@ using System;
 using System.Linq.Expressions;
 using System.Security.Cryptography;
 using CariBengkel.Common;
+using CariBengkel.Domain.Cores;
 using CariBengkel.Domain.Responses;
 using CariBengkel.Repository.Core;
 using CariBengkel.Repository.Entity.Model;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace CariBengkel.Domain.Services {
-    public class AuthService {
+    public class AuthServices : IAuthServices {
         private static IUnitOfWork _unitOfWork { get; set; }
         // private static Common _common = new Common();
-        public AuthService (IUnitOfWork unitOfWork) {
+        public AuthServices (IUnitOfWork unitOfWork) {
             _unitOfWork = unitOfWork;
         }
         public BaseResponse<Credentials> Login (Credentials model) {
