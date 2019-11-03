@@ -1,9 +1,12 @@
+using System;
 using AutoMapper;
 using CariBengkel.Domain.Cores;
 using CariBengkel.Repository.Entity.Model;
+using CariBengkel.Website.Config;
 using CariBengkel.Website.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Localization;
 
 namespace CariBengkel.Website.Controllers.Api {
     [ApiController]
@@ -11,9 +14,11 @@ namespace CariBengkel.Website.Controllers.Api {
     public class AuthenticationApi : Controller {
         private IAuthServices _authService;
         private readonly IMapper _mapper;
-        public AuthenticationApi (IAuthServices authServices, IMapper mapper) {
+        private readonly IHtmlLocalizer<AuthenticationApi> _localizer;
+        public AuthenticationApi (IAuthServices authServices, IMapper mapper, IHtmlLocalizer<AuthenticationApi> localizer) {
             _authService = authServices;
             _mapper = mapper;
+            _localizer = localizer;
         }
 
         [HttpPost]
@@ -30,9 +35,15 @@ namespace CariBengkel.Website.Controllers.Api {
         [ProducesResponseType (StatusCodes.Status400BadRequest)]
         [Route ("register")]
         public ActionResult Register (CredentialViewModel credential) {
+            var validator = new CredentialValidator ();
+            var validatorResult = validator.Validate (credential);
+            if (!validatorResult.IsValid)
+                return BadRequest (validatorResult.Errors.ToString ());
+
             var modelCredentials = _mapper.Map<Credentials> (credential);
 
-            var result = _authService.Login (modelCredentials);
+            var result = _authService.Register (modelCredentials);
+            result.Message = _localizer[result.Message].ToString ();
 
             return Json (result);
         }

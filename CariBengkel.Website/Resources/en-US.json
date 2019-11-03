@@ -1,0 +1,7 @@
+{
+    "ERROR-0001": "Email already exist.",
+    "ERROR-0002": "Username already exist.",
+    "ERROR-0003": "Email/Username not found.",
+    "ERROR-0004": "Password did not match out record",
+    "INFO-0001": "Register successfully."
+}

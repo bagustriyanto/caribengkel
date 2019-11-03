@@ -1,7 +1,6 @@
 using CariBengkel.Website.Models;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace CariBengkel.Website.Config {
     public class InitializeValidator {

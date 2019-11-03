@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace CariBengkel.Domain.Config {
     public class DIConfig {
         public void Initialize (IServiceCollection services) {
-            services.AddSingleton<IAuthServices, AuthServices> ();
+            services.AddScoped<IAuthServices, AuthServices> ();
         }
     }
 }

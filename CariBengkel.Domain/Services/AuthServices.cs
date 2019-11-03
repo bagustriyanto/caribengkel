@@ -4,9 +4,9 @@ using System.Security.Cryptography;
 using CariBengkel.Common;
 using CariBengkel.Domain.Cores;
 using CariBengkel.Domain.Responses;
-using CariBengkel.Repository.Core;
 using CariBengkel.Repository.Entity.Model;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Threenine.Data;
 
 namespace CariBengkel.Domain.Services {
     public class AuthServices : IAuthServices {
@@ -26,6 +26,16 @@ namespace CariBengkel.Domain.Services {
                 predicate = x => x.Username.Equals (model.Username);
 
             var credential = _unitOfWork.GetRepository<Credentials> ().Single (predicate, null, null);
+
+            if (credential == null)
+                throw new Exception ("ERROR-0003");
+
+            var passEncrypt = new Password ().PasswordEncrypt (model.Password);
+
+            if (credential.Password != passEncrypt)
+                throw new Exception ("ERROR-0004");
+
+            credential.Password = null;
 
             result.Data = credential;
 
@@ -56,7 +66,7 @@ namespace CariBengkel.Domain.Services {
             _unitOfWork.GetRepository<Credentials> ().Add (model);
 
             result.Status = true;
-            result.Message = "REGISTER_SUCCESS";
+            result.Message = "INFO-0001";
 
             return result;
         }

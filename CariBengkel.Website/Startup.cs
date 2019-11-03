@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -7,6 +8,7 @@ using CariBengkel.Domain.Config;
 using CariBengkel.Repository.Entity.Model;
 using CariBengkel.Website.Config;
 using FluentValidation.AspNetCore;
+using LocalizationCultureCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -15,6 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Threenine.Data.DependencyInjection;
 
 namespace CariBengkel.Website {
     public class Startup {
@@ -32,24 +35,28 @@ namespace CariBengkel.Website {
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            // db context
-            services.AddDbContext<AppDbContext> (opt => opt.UseNpgsql (Configuration.GetConnectionString ("DefaultConnection")));
+            // dependency injection service
+            var dIConfig = new DIConfig ();
+            dIConfig.Initialize (services);
 
-            // depedency injection service
-            var serviceConfig = new DIConfig ();
-            serviceConfig.Initialize (services);
+            // db context
+            services.AddDbContext<AppDbContext> (opt => opt.UseNpgsql (Configuration.GetConnectionString ("DefaultConnection")))
+                .AddUnitOfWork<AppDbContext> ();
 
             // depedency injection auto mapper
             services.AddAutoMapper (typeof (MapperProfile));
+
+            // localization
+            services.AddJsonLocalization (opt => opt.ResourcesPath = "Resources");
 
             services.AddMvc ()
                 .AddFluentValidation (
                     config => new InitializeValidator ().Setup (config)
                 )
+                .AddViewLocalization ()
                 .SetCompatibilityVersion (CompatibilityVersion.Version_2_2);
 
-            // depedency injection fluent validation
-
+            CultureInfo.CurrentCulture = new CultureInfo ("en-US");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
