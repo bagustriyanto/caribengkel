@@ -4,6 +4,11 @@
     "ERROR-0002": "Username already exist.",
     "ERROR-0003": "Email/Username not found.",
     "ERROR-0004": "Password did not match out record",
-    "INFO-0001": "Register successfully.",
-    "INFO-0002": "Login successfully."
+    "ERROR-0005": "Email not found.",
+    "ERROR-0006": "Role already exist.",
+    "INFO-0000": "Save success",
+    "INFO-0001": "Register success.",
+    "INFO-0002": "Login success.",
+    "INFO-0003": "Reset password success.",
+    "INFO-0004": "Email sent. please check your email"
 }
