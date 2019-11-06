@@ -25,9 +25,18 @@ namespace CariBengkel.Website.Controllers.Api {
         [ProducesResponseType (StatusCodes.Status202Accepted)]
         [ProducesResponseType (StatusCodes.Status404NotFound)]
         [Route ("login")]
-        public ActionResult Login () {
+        public ActionResult Login (CredentialViewModel credential) {
+            var validator = new LoginValidator ();
+            var validatorResult = validator.Validate (credential);
+            if (!validatorResult.IsValid)
+                return BadRequest (validatorResult.Errors.ToString ());
 
-            return Json (new object ());
+            var modelCredentials = _mapper.Map<Credentials> (credential);
+            var result = _authService.Login (modelCredentials);
+
+            result.Message = _localizer[result.Message].Value;
+
+            return Json (result);
         }
 
         [HttpPost]
@@ -40,10 +49,11 @@ namespace CariBengkel.Website.Controllers.Api {
             if (!validatorResult.IsValid)
                 return BadRequest (validatorResult.Errors.ToString ());
 
+            credential.Status = true;
             var modelCredentials = _mapper.Map<Credentials> (credential);
 
             var result = _authService.Register (modelCredentials);
-            result.Message = _localizer[result.Message].ToString ();
+            result.Message = _localizer[result.Message].Value;
 
             return Json (result);
         }

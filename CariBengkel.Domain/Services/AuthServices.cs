@@ -16,58 +16,70 @@ namespace CariBengkel.Domain.Services {
             _unitOfWork = unitOfWork;
         }
         public BaseResponse<Credentials> Login (Credentials model) {
-            BaseResponse<Credentials> result = null;
+            BaseResponse<Credentials> result = new BaseResponse<Credentials> ();
             Expression<Func<Credentials, bool>> predicate = null;
 
-            if (!string.IsNullOrEmpty (model.Email))
-                predicate = x => x.Email.Equals (model.Email);
+            try {
+                if (!string.IsNullOrEmpty (model.Username))
+                    predicate = x => x.Username.Equals (model.Username) || x.Email.Equals (model.Username);
 
-            if (!string.IsNullOrEmpty (model.Username))
-                predicate = x => x.Username.Equals (model.Username);
+                var credential = _unitOfWork.GetRepository<Credentials> ().Single (predicate, null, null);
 
-            var credential = _unitOfWork.GetRepository<Credentials> ().Single (predicate, null, null);
+                if (credential == null)
+                    throw new Exception ("ERROR-0003");
 
-            if (credential == null)
-                throw new Exception ("ERROR-0003");
+                var password = new Password ();
+                var passEncrypt = password.PasswordEncrypt (model.Password, credential.Salt);
 
-            var passEncrypt = new Password ().PasswordEncrypt (model.Password);
+                if (credential.Password != passEncrypt)
+                    throw new Exception ("ERROR-0004");
 
-            if (credential.Password != passEncrypt)
-                throw new Exception ("ERROR-0004");
+                credential.Password = null;
 
-            credential.Password = null;
-
-            result.Data = credential;
+                result.Data = credential;
+                result.Message = "INFO-0002";
+                result.Status = true;
+            } catch (Exception ex) {
+                result.Status = false;
+                result.Message = ex.Message.Contains ("ERROR-") == false ? "ERROR-0000" : ex.Message;
+            }
 
             return result;
         }
 
         public BaseResponse<Credentials> Register (Credentials model) {
-            BaseResponse<Credentials> result = null;
+            BaseResponse<Credentials> result = new BaseResponse<Credentials> ();
             Expression<Func<Credentials, bool>> predicate = null;
 
-            if (!string.IsNullOrEmpty (model.Email)) {
-                predicate = x => x.Email.Equals (model.Email);
+            try {
+                if (!string.IsNullOrEmpty (model.Email)) {
+                    predicate = x => x.Email.Equals (model.Email);
 
-                var credential = _unitOfWork.GetRepository<Credentials> ().Single (predicate, null, null);
-                if (credential != null)
-                    throw new Exception ("ERROR-0001");
+                    var credential = _unitOfWork.GetRepository<Credentials> ().Single (predicate, null, null);
+                    if (credential != null)
+                        throw new Exception ("ERROR-0001");
+                }
+
+                if (!string.IsNullOrEmpty (model.Username)) {
+                    predicate = x => x.Username.Equals (model.Username);
+                    var credential = _unitOfWork.GetRepository<Credentials> ().Single (predicate, null, null);
+                    if (credential != null)
+                        throw new Exception ("ERROR-0002");
+                }
+
+                var password = new Password ();
+                model.Salt = password.Salt ();
+                model.Password = new Password ().PasswordEncrypt (model.Password, model.Salt);
+
+                _unitOfWork.GetRepository<Credentials> ().Add (model);
+                _unitOfWork.SaveChanges ();
+
+                result.Status = true;
+                result.Message = "INFO-0001";
+            } catch (Exception ex) {
+                result.Status = false;
+                result.Message = ex.Message.Contains ("ERROR-") == false ? "ERROR-0000" : ex.Message;
             }
-
-            if (!string.IsNullOrEmpty (model.Username)) {
-                predicate = x => x.Username.Equals (model.Username);
-                var credential = _unitOfWork.GetRepository<Credentials> ().Single (predicate, null, null);
-                if (credential != null)
-                    throw new Exception ("ERROR-0002");
-            }
-
-            model.Password = new Password ().PasswordEncrypt (model.Password);
-
-            _unitOfWork.GetRepository<Credentials> ().Add (model);
-
-            result.Status = true;
-            result.Message = "INFO-0001";
-
             return result;
         }
     }

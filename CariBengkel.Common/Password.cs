@@ -1,18 +1,21 @@
 using System;
 using System.Security.Cryptography;
+using System.Text;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace CariBengkel.Common {
     public class Password {
-        public string PasswordEncrypt (string password) {
-            // generate a 128-bit salt using a secure PRNG
-            byte[] salt = new byte[128 / 8];
-            using (var rng = RandomNumberGenerator.Create ()) {
-                rng.GetBytes (salt);
+        public string Salt () {
+            byte[] randomBytes = new byte[128 / 8];
+            using (var generator = RandomNumberGenerator.Create ()) {
+                generator.GetBytes (randomBytes);
+                return Convert.ToBase64String (randomBytes);
             }
+        }
+        public string PasswordEncrypt (string password, string salt) {
             string hashed = Convert.ToBase64String (KeyDerivation.Pbkdf2 (
                 password: password,
-                salt: salt,
+                salt: Encoding.UTF8.GetBytes (salt),
                 prf: KeyDerivationPrf.HMACSHA1,
                 iterationCount: 10000,
                 numBytesRequested: 256 / 8));
