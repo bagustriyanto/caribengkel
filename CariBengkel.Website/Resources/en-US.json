@@ -10,5 +10,8 @@
     "INFO-0001": "Register success.",
     "INFO-0002": "Login success.",
     "INFO-0003": "Reset password success.",
-    "INFO-0004": "Email sent. please check your email"
+    "INFO-0004": "Email sent. please check your email",
+    "INFO-0005": "Create user success.",
+    "INFO-0006": "Update user success.",
+    "INFO-0007": "Delete user success."
 }

@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.Localization;
 
 namespace CariBengkel.Website.Controllers.Api {
     [ApiController]
-    [Route ("api/auth")]
+    [Route ("[controller]")]
     public class AuthenticationApi : Controller {
         private IAuthServices _authService;
         private readonly IMapper _mapper;

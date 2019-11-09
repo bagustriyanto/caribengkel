@@ -22,4 +22,13 @@ namespace CariBengkel.Website.Config {
             RuleFor (cr => cr.Password).MaximumLength (20).NotNull ();
         }
     }
+
+    public class UserValidator : AbstractValidator<UserViewModel> {
+        public UserValidator () {
+            RuleFor (user => user.Credential.Email).NotNull ().EmailAddress ();
+            RuleFor (user => user.Credential.Username).NotNull ();
+            RuleFor (user => user.Credential.Password).NotNull ();
+            RuleFor (user => user.FirstName).NotNull ();
+        }
+    }
 }

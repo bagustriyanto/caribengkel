@@ -3,15 +3,17 @@ using System;
 using CariBengkel.Repository.Entity.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace CariBengkel.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191107075208_AddUserTableAndCredentialColumn")]
+    partial class AddUserTableAndCredentialColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,8 +44,8 @@ namespace CariBengkel.Repository.Migrations
                         .HasColumnName("email")
                         .HasMaxLength(100);
 
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnName("modified_by")
+                    b.Property<string>("ModifeidBy")
+                        .HasColumnName("modifeid_by")
                         .HasMaxLength(50);
 
                     b.Property<string>("ModifiedHost")
@@ -71,10 +73,6 @@ namespace CariBengkel.Repository.Migrations
                         .IsRequired()
                         .HasColumnName("username")
                         .HasMaxLength(50);
-
-                    b.Property<string>("VerificationCode")
-                        .HasColumnName("verification_code")
-                        .HasColumnType("character varying");
 
                     b.HasKey("Id");
 

@@ -26,6 +26,7 @@ namespace CariBengkel.Repository.Entity.Model
         public virtual DbSet<TrProduct> TrProduct { get; set; }
         public virtual DbSet<TrServicePackage> TrServicePackage { get; set; }
         public virtual DbSet<TrServicePackageDetail> TrServicePackageDetail { get; set; }
+        public virtual DbSet<User> User { get; set; }
 
         // Unable to generate entity type for table 'public.tr_product_detail'. Please see the warning messages.
 
@@ -50,10 +51,30 @@ namespace CariBengkel.Repository.Entity.Model
                     .HasColumnName("id")
                     .UseNpgsqlIdentityByDefaultColumn();
 
+                entity.Property(e => e.CreatedBy)
+                    .HasColumnName("created_by")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.CreatedHost)
+                    .HasColumnName("created_host")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.CreatedOn).HasColumnName("created_on");
+
                 entity.Property(e => e.Email)
                     .IsRequired()
                     .HasColumnName("email")
                     .HasMaxLength(100);
+
+                entity.Property(e => e.ModifiedBy)
+                    .HasColumnName("modified_by")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.ModifiedHost)
+                    .HasColumnName("modified_host")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.ModifiedOn).HasColumnName("modified_on");
 
                 entity.Property(e => e.Password)
                     .IsRequired()
@@ -71,6 +92,10 @@ namespace CariBengkel.Repository.Entity.Model
                     .IsRequired()
                     .HasColumnName("username")
                     .HasMaxLength(50);
+
+                entity.Property(e => e.VerificationCode)
+                    .HasColumnName("verification_code")
+                    .HasColumnType("character varying");
             });
 
             modelBuilder.Entity<Customer>(entity =>
@@ -528,6 +553,53 @@ namespace CariBengkel.Repository.Entity.Model
                     .HasForeignKey(d => d.IdServicePackage)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("service_package_detail_service_package_fk");
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.ToTable("user");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .UseNpgsqlIdentityByDefaultColumn();
+
+                entity.Property(e => e.CreatedBy)
+                    .HasColumnName("created_by")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.CreatedHost)
+                    .HasColumnName("created_host")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.CreatedOn).HasColumnName("created_on");
+
+                entity.Property(e => e.FirstName)
+                    .HasColumnName("first_name")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.IdCredential).HasColumnName("id_credential");
+
+                entity.Property(e => e.LastName)
+                    .HasColumnName("last_name")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.ModifiedBy)
+                    .HasColumnName("modified_by")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.ModifiedHost)
+                    .HasColumnName("modified_host")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.ModifiedOn).HasColumnName("modified_on");
+
+                entity.Property(e => e.Phone).HasColumnName("phone");
+
+                entity.HasOne(d => d.IdCredentialNavigation)
+                    .WithMany(p => p.User)
+                    .HasForeignKey(d => d.IdCredential)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("user_fk");
             });
         }
     }

@@ -6,6 +6,8 @@ namespace CariBengkel.Domain.Config {
     public class DIConfig {
         public void Initialize (IServiceCollection services) {
             services.AddScoped<IAuthServices, AuthServices> ();
+            services.AddScoped<IUserServices, UserServices> ();
+            services.AddScoped<IRoleServices, RoleServices> ();
         }
     }
 }

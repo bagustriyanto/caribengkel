@@ -6,6 +6,7 @@ namespace CariBengkel.Website.Config {
     public class MapperProfile : Profile {
         public MapperProfile () {
             CreateMap<CredentialViewModel, Credentials> ();
+            CreateMap<UserViewModel, User> ();
         }
     }
 }
