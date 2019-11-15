@@ -3,19 +3,19 @@ using System.Collections.Generic;
 
 namespace CariBengkel.Repository.Entity.Model
 {
-    public partial class Role
+    public partial class Menu
     {
-        public Role()
+        public Menu()
         {
             MenuRoleMap = new HashSet<MenuRoleMap>();
-            RoleMap = new HashSet<RoleMap>();
         }
 
         public long Id { get; set; }
-        public string Name { get; set; }
-        public bool Status { get; set; }
+        public string Title { get; set; }
+        public string Url { get; set; }
+        public long? Parent { get; set; }
+        public bool? Status { get; set; }
 
         public virtual ICollection<MenuRoleMap> MenuRoleMap { get; set; }
-        public virtual ICollection<RoleMap> RoleMap { get; set; }
     }
 }

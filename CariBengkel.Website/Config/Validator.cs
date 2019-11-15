@@ -25,10 +25,8 @@ namespace CariBengkel.Website.Config {
 
     public class UserValidator : AbstractValidator<UserViewModel> {
         public UserValidator () {
-            RuleFor (user => user.Credential.Email).NotNull ().EmailAddress ();
-            RuleFor (user => user.Credential.Username).NotNull ();
-            RuleFor (user => user.Credential.Password).NotNull ();
             RuleFor (user => user.FirstName).NotNull ();
+            RuleFor (user => user.Credential).SetValidator (new CredentialValidator ());
         }
     }
 }

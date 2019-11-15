@@ -9,5 +9,6 @@ namespace CariBengkel.Domain.Cores {
         BaseResponse<Credentials> ResetPassword (DtoCredential model);
         BaseResponse<Credentials> ForgotPassword (Credentials model);
         BaseResponse<Credentials> NewPassword (Credentials model);
+        BaseResponse<Credentials> Verification (Credentials model);
     }
 }

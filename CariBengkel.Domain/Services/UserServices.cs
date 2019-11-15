@@ -1,5 +1,6 @@
 using System;
 using System.Linq.Expressions;
+using CariBengkel.Common;
 using CariBengkel.Domain.Cores;
 using CariBengkel.Domain.Responses;
 using CariBengkel.Repository.Entity.Model;
@@ -30,11 +31,13 @@ namespace CariBengkel.Domain.Services {
                 if (credentialModel != null)
                     throw new Exception ("ERROR-0002");
 
+                var password = new Password ();
+                model.IdCredentialNavigation.Salt = password.Salt ();
+                model.IdCredentialNavigation.Password = new Password ().PasswordEncrypt (model.IdCredentialNavigation.Password, model.IdCredentialNavigation.Salt);
+                model.IdCredentialNavigation.Status = true;
                 model.IdCredentialNavigation.CreatedBy = model.IdCredentialNavigation.Username;
                 model.IdCredentialNavigation.CreatedOn = DateTime.Now;
                 model.IdCredentialNavigation.CreatedHost = _accessor.HttpContext.Connection.RemoteIpAddress.ToString ();
-
-                // _unitOfWork.GetRepository<Credentials> ().Add (model.IdCredentialNavigation);
 
                 model.CreatedBy = model.IdCredentialNavigation.Username;
                 model.CreatedOn = DateTime.Now;

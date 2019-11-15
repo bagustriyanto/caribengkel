@@ -35,6 +35,8 @@ namespace CariBengkel.Website {
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddHttpContextAccessor ();
+
             // dependency injection service
             var dIConfig = new DIConfig ();
             dIConfig.Initialize (services);
@@ -48,7 +50,6 @@ namespace CariBengkel.Website {
 
             // localization
             services.AddJsonLocalization (opt => opt.ResourcesPath = "Resources");
-
             services.AddMvc ()
                 .AddFluentValidation (
                     config => new InitializeValidator ().Setup (config)

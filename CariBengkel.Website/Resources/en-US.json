@@ -6,6 +6,7 @@
     "ERROR-0004": "Password did not match out record",
     "ERROR-0005": "Email not found.",
     "ERROR-0006": "Role already exist.",
+    "ERROR-9999": "Object already exist",
     "INFO-0000": "Save success",
     "INFO-0001": "Register success.",
     "INFO-0002": "Login success.",
@@ -13,5 +14,6 @@
     "INFO-0004": "Email sent. please check your email",
     "INFO-0005": "Create user success.",
     "INFO-0006": "Update user success.",
-    "INFO-0007": "Delete user success."
+    "INFO-0007": "Delete user success.",
+    "INFO-0008": "Delete success."
 }

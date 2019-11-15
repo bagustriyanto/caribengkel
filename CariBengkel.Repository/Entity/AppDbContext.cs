@@ -17,6 +17,8 @@ namespace CariBengkel.Repository.Entity.Model
 
         public virtual DbSet<Credentials> Credentials { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
+        public virtual DbSet<Menu> Menu { get; set; }
+        public virtual DbSet<MenuRoleMap> MenuRoleMap { get; set; }
         public virtual DbSet<Owner> Owner { get; set; }
         public virtual DbSet<Parameter> Parameter { get; set; }
         public virtual DbSet<Role> Role { get; set; }
@@ -140,6 +142,52 @@ namespace CariBengkel.Repository.Entity.Model
                     .IsRequired()
                     .HasColumnName("phone")
                     .HasMaxLength(15);
+            });
+
+            modelBuilder.Entity<Menu>(entity =>
+            {
+                entity.ToTable("menu");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .UseNpgsqlIdentityByDefaultColumn();
+
+                entity.Property(e => e.Parent).HasColumnName("parent");
+
+                entity.Property(e => e.Status).HasColumnName("status");
+
+                entity.Property(e => e.Title)
+                    .HasColumnName("title")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Url)
+                    .HasColumnName("url")
+                    .HasMaxLength(100);
+            });
+
+            modelBuilder.Entity<MenuRoleMap>(entity =>
+            {
+                entity.ToTable("menu_role_map");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .UseNpgsqlIdentityByDefaultColumn();
+
+                entity.Property(e => e.IdMenu).HasColumnName("id_menu");
+
+                entity.Property(e => e.IdRole).HasColumnName("id_role");
+
+                entity.HasOne(d => d.IdMenuNavigation)
+                    .WithMany(p => p.MenuRoleMap)
+                    .HasForeignKey(d => d.IdMenu)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("menu_role_map_fk");
+
+                entity.HasOne(d => d.IdRoleNavigation)
+                    .WithMany(p => p.MenuRoleMap)
+                    .HasForeignKey(d => d.IdRole)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("menu_role_map_fk_1");
             });
 
             modelBuilder.Entity<Owner>(entity =>

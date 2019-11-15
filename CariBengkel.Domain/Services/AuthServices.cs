@@ -159,5 +159,28 @@ namespace CariBengkel.Domain.Services {
 
             return result;
         }
+
+        public BaseResponse<Credentials> Verification (Credentials model) {
+            BaseResponse<Credentials> result = new BaseResponse<Credentials> ();
+            Expression<Func<Credentials, bool>> predicate = null;
+
+            try {
+                predicate = x => x.VerificationCode.Contains (model.VerificationCode);
+                var modelCredential = _unitOfWork.GetRepository<Credentials> ().Single (predicate);
+                if (modelCredential == null)
+                    throw new Exception ("ERROR-0005");
+
+                modelCredential.Status = true;
+                _unitOfWork.GetRepository<Credentials> ().Update (modelCredential);
+                _unitOfWork.SaveChanges ();
+
+                result.Status = true;
+                result.Message = "INFO-0006";
+            } catch (Exception ex) {
+                result.Message = ex.Message.Contains ("ERROR-") == false ? "ERROR-0000" : ex.Message;
+            }
+
+            return result;
+        }
     }
 }
