@@ -18,5 +18,6 @@ namespace CariBengkel.Common.Constant {
         public const string INFO0006 = "INFO-0006";
         public const string INFO0007 = "INFO-0007";
         public const string INFO0008 = "INFO-0008";
+        public const string INFO9999 = "INFO-9999";
     }
 }

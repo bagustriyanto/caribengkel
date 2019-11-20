@@ -54,10 +54,11 @@ namespace CariBengkel.Website {
                 .AddFluentValidation (
                     config => new InitializeValidator ().Setup (config)
                 )
-                .AddViewLocalization ()
+                .AddViewLocalization (opt => opt.ResourcesPath = "Resources")
                 .SetCompatibilityVersion (CompatibilityVersion.Version_2_2);
 
-            CultureInfo.CurrentCulture = new CultureInfo ("en-US");
+            CultureInfo.CurrentCulture = new CultureInfo ("id-ID", false);
+            CultureInfo.CurrentUICulture = new CultureInfo ("id-ID", false);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

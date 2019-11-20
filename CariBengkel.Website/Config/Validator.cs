@@ -29,4 +29,11 @@ namespace CariBengkel.Website.Config {
             RuleFor (user => user.Credential).SetValidator (new CredentialValidator ());
         }
     }
+
+    public class MenuValidator : AbstractValidator<MenuViewModel> {
+        public MenuValidator () {
+            RuleFor (menu => menu.Title).NotNull ();
+            RuleFor (menu => menu.Url).NotNull ();
+        }
+    }
 }

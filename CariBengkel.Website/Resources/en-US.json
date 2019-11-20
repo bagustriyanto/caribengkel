@@ -15,5 +15,6 @@
     "INFO-0005": "Create user success.",
     "INFO-0006": "Update user success.",
     "INFO-0007": "Delete user success.",
-    "INFO-0008": "Delete success."
+    "INFO-0008": "Delete success.",
+    "INFO-9999": "Get data success."
 }

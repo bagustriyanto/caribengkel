@@ -6,5 +6,7 @@ namespace CariBengkel.Domain.Cores {
         BaseResponse<Menu> Create (Menu model);
         BaseResponse<Menu> Update (Menu model);
         BaseResponse<Menu> Delete (Menu model);
+        BaseResponse<Menu> Get (Menu model);
+        BaseResponse<Menu> GetAll ();
     }
 }

@@ -77,5 +77,37 @@ namespace CariBengkel.Domain.Services {
 
             return result;
         }
+
+        public BaseResponse<Menu> Get (Menu model) {
+            BaseResponse<Menu> result = new BaseResponse<Menu> ();
+            Expression<Func<Menu, bool>> predicate = null;
+
+            try {
+                predicate = x => x.Id.Equals (model.Id);
+                var menuModel = _unitOfWork.GetReadOnlyRepository<Menu> ().Single (predicate);
+                if (menuModel == null)
+                    throw new Exception (Message.ERR9999);
+                result.Status = true;
+                result.Data = menuModel;
+            } catch (System.Exception ex) {
+                result.Message = ex.Message.Contains ("ERROR-") == false ? Message.ERR0000 : ex.Message;
+            }
+
+            return result;
+        }
+
+        public BaseResponse<Menu> GetAll () {
+            BaseResponse<Menu> result = new BaseResponse<Menu> ();
+
+            try {
+                result.ListData = _unitOfWork.GetReadOnlyRepository<Menu> ().GetList ();
+                result.Status = true;
+                result.Message = Message.INFO9999;
+            } catch (System.Exception ex) {
+                result.Message = ex.Message.Contains ("ERROR-") == false ? Message.ERR0000 : ex.Message;
+            }
+
+            return result;
+        }
     }
 }

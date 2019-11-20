@@ -1,21 +1,35 @@
-<div class="menu-list">
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
-                aria-selected="true">Home</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
-                aria-selected="false">Profile</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
-                aria-selected="false">Contact</a>
-        </li>
-    </ul>
-    <div class="tab-content" id="myTabContent">
-        <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">...</div>
-        <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
-        <div class="tab-pane" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+<nav class="navbar navbar-secondary navbar-expand-lg menu-navbar">
+    <div class="container">
+        <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+                <a href="#" data-toggle="dropdown" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Master
+                        Data</span></a>
+                <ul class="dropdown-menu">
+                    <li class="nav-item"><a href="/Master/User" class="nav-link">User</a></li>
+                    <li class="nav-item"><a href="index.html" class="nav-link">Menu</a></li>
+                    <li class="nav-item"><a href="index.html" class="nav-link">Role</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#" data-toggle="dropdown" class="nav-link has-dropdown"><i
+                        class="far fa-clone"></i><span>Multiple Dropdown</span></a>
+                <ul class="dropdown-menu">
+                    <li class="nav-item"><a href="#" class="nav-link">Not Dropdown Link</a></li>
+                    <li class="nav-item dropdown"><a href="#" class="nav-link has-dropdown">Hover Me</a>
+                        <ul class="dropdown-menu">
+                            <li class="nav-item"><a href="#" class="nav-link">Link</a></li>
+                            <li class="nav-item dropdown"><a href="#" class="nav-link has-dropdown">Link 2</a>
+                                <ul class="dropdown-menu">
+                                    <li class="nav-item"><a href="#" class="nav-link">Link</a></li>
+                                    <li class="nav-item"><a href="#" class="nav-link">Link</a></li>
+                                    <li class="nav-item"><a href="#" class="nav-link">Link</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item"><a href="#" class="nav-link">Link 3</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </div>
-</div>
+</nav>
