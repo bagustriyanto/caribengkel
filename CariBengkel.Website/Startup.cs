@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using CariBengkel.Domain.Config;
+using CariBengkel.Repository.Entity.Custom;
 using CariBengkel.Repository.Entity.Model;
 using CariBengkel.Website.Config;
+using CariBengkel.Website.Models;
 using FluentValidation.AspNetCore;
 using LocalizationCultureCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -17,6 +21,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Serialization;
 using Threenine.Data.DependencyInjection;
 
 namespace CariBengkel.Website {
@@ -34,6 +40,8 @@ namespace CariBengkel.Website {
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+            services.Configure<TokenSetting> (Configuration.GetSection ("TokenManagement"));
+            var token = Configuration.GetSection ("TokenManagement").Get<TokenSetting> ();
 
             services.AddHttpContextAccessor ();
 
@@ -48,9 +56,30 @@ namespace CariBengkel.Website {
             // depedency injection auto mapper
             services.AddAutoMapper (typeof (MapperProfile));
 
+            // jwt auth
+            services.AddAuthentication (opt => {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer (opt => {
+                opt.RequireHttpsMetadata = false;
+                opt.SaveToken = true;
+                opt.TokenValidationParameters = new TokenValidationParameters {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey (Encoding.ASCII.GetBytes (token.Secret)),
+                    ValidIssuer = token.Issuer,
+                    ValidAudience = token.Audience,
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
             // localization
             services.AddJsonLocalization (opt => opt.ResourcesPath = "Resources");
             services.AddMvc ()
+                .AddJsonOptions (opt => {
+                    opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver ();
+                    opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                })
                 .AddFluentValidation (
                     config => new InitializeValidator ().Setup (config)
                 )
@@ -71,6 +100,7 @@ namespace CariBengkel.Website {
                 app.UseHsts ();
             }
 
+            app.UseCors (opt => opt.AllowAnyHeader ().AllowAnyMethod ().AllowAnyOrigin ());
             app.UseHttpsRedirection ();
             app.UseStaticFiles ();
             app.UseCookiePolicy ();
@@ -82,6 +112,10 @@ namespace CariBengkel.Website {
                 routes.MapRoute (
                     name: "api",
                     template: "api/{controller=Home}/{action=Index}/{id?}"
+                );
+                routes.MapRoute (
+                    name: "backoffice",
+                    template: "system/{controller=Backoffice}/{action=Index}/{id?}"
                 );
             });
         }

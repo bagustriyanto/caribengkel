@@ -12,9 +12,11 @@ using Threenine.Data;
 namespace CariBengkel.Domain.Services {
     public class AuthServices : IAuthServices {
         private static IUnitOfWork _unitOfWork { get; set; }
+        private ITokenServices _tokenServices { get; set; }
 
-        public AuthServices (IUnitOfWork unitOfWork) {
+        public AuthServices (IUnitOfWork unitOfWork, ITokenServices tokenServices) {
             _unitOfWork = unitOfWork;
+            _tokenServices = tokenServices;
         }
         public BaseResponse<Credentials> Login (Credentials model) {
             BaseResponse<Credentials> result = new BaseResponse<Credentials> ();
@@ -34,6 +36,8 @@ namespace CariBengkel.Domain.Services {
 
                 if (credential.Password != passEncrypt)
                     throw new Exception ("ERROR-0004");
+
+                // get role and create jwt token
 
                 result.Message = "INFO-0002";
                 result.Status = true;

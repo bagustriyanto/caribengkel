@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.Localization;
 
 namespace CariBengkel.Website.Controllers.Api {
     [ApiController]
-    [Route ("[controller]")]
+    [Route ("api/menu")]
     public class MenuApi : Controller {
         private readonly IMapper _mapper;
         private readonly IMenuServices _menuService;
@@ -84,8 +84,8 @@ namespace CariBengkel.Website.Controllers.Api {
         [HttpGet]
         [ProducesResponseType (StatusCodes.Status200OK)]
         [ProducesResponseType (StatusCodes.Status404NotFound)]
-        public IActionResult GetAll () {
-            var result = _menuService.GetAll ();
+        public IActionResult GetAll (string title, int limit = 20, int index = 0) {
+            var result = _menuService.GetList (title, limit, index);
             result.Message = _localizer[result.Message].Value;
 
             return Json (result);

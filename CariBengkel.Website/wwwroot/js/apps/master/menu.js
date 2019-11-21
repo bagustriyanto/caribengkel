@@ -11,19 +11,23 @@ const masterMenu = new Vue({
             cbStatus: "0"
         },
         list: {
-
         },
         validate: {
             title: false,
             url: false
         },
+        cbMenuList: {},
         showForm: false,
         btnShowModal: null,
         formTitle: null,
-        searchTerm: null
+        searchTerm: null,
+        paging: {
+            page: 0,
+            perPage: 0
+        }
     },
     mounted() {
-        this.getAll();
+        axios.all([this.getAll(), this.getCbMenu()]);
     },
     created() {
 
@@ -53,20 +57,22 @@ const masterMenu = new Vue({
             this.formType = 1;
             this.showForm = true;
             this.formTitle = 'Ubah Menu';
-            this.form = item;
+            this.setForm(item);
             this.form.cbStatus = item.status === false ? '0' : '1'
         },
         viewClick: function (item) {
             this.formType = 2;
             this.showForm = true;
             this.formTitle = 'Lihat Menu';
-            this.form = item;
+            this.setForm(item);
             this.form.cbStatus = item.status === false ? '0' : '1'
         },
         onSubmit: function () {
             this.form.status = this.form.cbStatus === '0' ? false : true;
+            this.form.parent = this.form.parent === "" ? null : this.form.parent;
+
             if (this.formType === 0) {
-                ajax.post('/menuapi', this.form)
+                axios.post('/menu', this.form)
                     .then((response) => {
                         alertMessage(response.data.message, 1, this.formCloseCallback(1));
                         this.getAll();
@@ -74,21 +80,28 @@ const masterMenu = new Vue({
                         alertMessage(ERROR_MESSAGE, 0, this.formCloseCallback(0));
                     });
             } else {
-                ajax.put(`/menuapi/${this.form.id}`, this.form)
-                    .then((response) => {
-                        alertMessage(response.data.message, 1, this.formCloseCallback(1));
+                axios.put(`/menu/${this.form.id}`, this.form)
+                    .then(({ data }) => {
+                        alertMessage(data.message, 1, this.formCloseCallback(1));
                         this.getAll();
-                    }).catch((response) => {
+                    }).catch(() => {
                         alertMessage(ERROR_MESSAGE, 0, this.formCloseCallback(0));
                     });
             }
 
         },
         getAll: function () {
-            ajax.get('/menuapi').then((response) => {
-                this.list = response.data.listData.items;
-            }).catch((response) => {
-
+            axios.get('/menu').then(({ data }) => {
+                this.list = data.listData.items;
+            });
+        },
+        getCbMenu: function () {
+            axios.get('/menu', {
+                params: {
+                    limit: 50
+                }
+            }).then(({ data }) => {
+                this.cbMenuList = data.listData.items;
             });
         },
         formCloseCallback: function (type) {
@@ -107,7 +120,20 @@ const masterMenu = new Vue({
             this.form.cbStatus = '0';
         },
         searchMenu: function () {
-
+            axios.get('/menu', {
+                params: {
+                    title: this.searchTerm
+                }
+            }).then(({ data }) => {
+                this.list = data.listData.items;
+            });
+        },
+        setForm: function ({ id, title, url, parent, status }) {
+            this.form.id = id;
+            this.form.title = title;
+            this.form.url = url;
+            this.form.parent = parent;
+            this.form.cbStatus = status ? '1' : '0'
         }
     }
 });

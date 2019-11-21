@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Threenine.Data.Paging;
 
 namespace CariBengkel.Domain.Responses {
@@ -7,5 +8,6 @@ namespace CariBengkel.Domain.Responses {
         public string Message { get; set; }
         public T Data { get; set; }
         public IPaginate<T> ListData { get; set; }
+        // public IList<T> ListData { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using CariBengkel.Website.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CariBengkel.Website.Controllers {
-    [Route ("master")]
+    [Route ("system/master")]
     public class MasterDataController : Controller {
         [Route ("user")]
         public IActionResult Users () {

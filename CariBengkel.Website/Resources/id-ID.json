@@ -21,6 +21,12 @@
     "label_status": "Status",
     "label_url": "URL",
     "label_parent": "Parent",
-    "err_judul": "Judul harus diisi",
-    "action_save": "Simpan"
+    "placeholder_title": "Cari Judul",
+    "form_required": "Harus diisi",
+    "action_save": "Simpan",
+    "action_cancel": "Batal",
+    "action_delete_all": "Hapus semua",
+    "action_delete": "Hapus",
+    "status_active": "Aktif",
+    "status_inactive": "Non Aktif"
 }

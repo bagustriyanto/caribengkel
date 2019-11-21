@@ -63,7 +63,4 @@ const alertMessage = function (message, type, callback) {
     }).then(callback);
 }
 
-const ajax = axios.create({
-    baseURL: 'https://localhost:5001/',
-});
-
+axios.defaults.baseURL = 'https://localhost:5001/api/';

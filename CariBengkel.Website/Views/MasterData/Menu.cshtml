@@ -33,40 +33,45 @@ ViewBag.Title = "Master Data - Menu";
                                 <input type="text" v-model="form.title" class="form-control"
                                     v-bind:class="{'is-invalid': titleValidation}">
                                 <div class="invalid-feedback" v-if="titleValidation">
-                                    Judul harus diisi
+                                    @Localizer["form_required"]
                                 </div>
                             </div>
                         </div>
                         <div class="form-group row mb-4">
-                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Url</label>
+                            <label
+                                class="col-form-label text-md-right col-12 col-md-3 col-lg-3">@Localizer["label_url"]</label>
                             <div class="col-sm-12 col-md-4">
                                 <input type="text" v-model="form.url" class="form-control"
                                     v-bind:class="{'is-invalid': urlValidation}">
                                 <div class="invalid-feedback" v-if="urlValidation">
-                                    Url harus diisi
+                                    @Localizer["form_required"]
                                 </div>
                             </div>
                         </div>
                         <div class="form-group row mb-4">
-                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Parent</label>
+                            <label
+                                class="col-form-label text-md-right col-12 col-md-3 col-lg-3">@Localizer["label_parent"]</label>
                             <div class="col-sm-12 col-md-4">
                                 <input type="text" v-model="form.parent" class="form-control">
                             </div>
                         </div>
                         <div class="form-group row mb-4">
-                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Status</label>
+                            <label
+                                class="col-form-label text-md-right col-12 col-md-3 col-lg-3">@Localizer["label_status"]</label>
                             <div class="col-sm-12 col-md-2">
                                 <select class="form-control selectric" v-model="form.cbStatus">
-                                    <option v-bind:value="0">Non Aktif</option>
-                                    <option v-bind:value="1">Aktif</option>
+                                    <option v-bind:value="0">@Localizer["status_inactive"]</option>
+                                    <option v-bind:value="1">@Localizer["status_active"]</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group row mb-4">
                             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
                             <div class="col-sm-12 col-md-7" style="text-align: right;">
-                                <button class="btn btn-danger" v-on:click="formCancel">Batal</button>
-                                <button class="btn btn-primary" v-if="formType === 0 || formType === 1">Simpan</button>
+                                <button class="btn btn-danger"
+                                    v-on:click="formCancel">@Localizer["action_cancel"]</button>
+                                <button class="btn btn-primary"
+                                    v-if="formType === 0 || formType === 1">@Localizer["action_save"]</button>
                             </div>
                         </div>
                     </div>
@@ -92,7 +97,8 @@ ViewBag.Title = "Master Data - Menu";
                     <div class="float-right">
                         <form>
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Cari" v-model="searchTerm">
+                                <input type="text" class="form-control" placeholder='@Localizer["placeholder_title"]'
+                                    v-model="searchTerm">
                                 <div class="input-group-append">
                                     <button class="btn btn-primary" v-on:click="searchMenu"><i
                                             class="fas fa-search"></i></button>
@@ -139,9 +145,9 @@ ViewBag.Title = "Master Data - Menu";
                                         </div>
                                     </td>
                                     <td>
-                                        <a v-bind:href="item.url">{{item.url}}</a>
+                                        <a href="#">{{item.url}}</a>
                                     </td>
-                                    <td></td>
+                                    <td>{{item.parentNavigation !== null ? item.parentNavigation.title : ''}}</td>
                                     <td>
                                         <div class="badge"
                                             v-bind:class="{'badge-primary': item.status, 'badge-danger': !item.status}">

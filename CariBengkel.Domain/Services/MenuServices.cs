@@ -1,9 +1,14 @@
 using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
 using System.Linq.Expressions;
 using CariBengkel.Common.Constant;
 using CariBengkel.Domain.Cores;
 using CariBengkel.Domain.Responses;
 using CariBengkel.Repository.Entity.Model;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Threenine.Data;
 
 namespace CariBengkel.Domain.Services {
@@ -96,11 +101,15 @@ namespace CariBengkel.Domain.Services {
             return result;
         }
 
-        public BaseResponse<Menu> GetAll () {
+        public BaseResponse<Menu> GetList (string title, int limit, int index) {
             BaseResponse<Menu> result = new BaseResponse<Menu> ();
+            Expression<Func<Menu, bool>> predicate = null;
 
             try {
-                result.ListData = _unitOfWork.GetReadOnlyRepository<Menu> ().GetList ();
+                if (!string.IsNullOrEmpty (title))
+                    predicate = x => x.Title.ToLower ().Contains (title.ToLower ());
+
+                result.ListData = _unitOfWork.GetReadOnlyRepository<Menu> ().GetList (predicate, orderBy : src => src.OrderBy (x => x.Id), include : src => src.Include (m => m.InverseParentNavigation), index, limit);
                 result.Status = true;
                 result.Message = Message.INFO9999;
             } catch (System.Exception ex) {

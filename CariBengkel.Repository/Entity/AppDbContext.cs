@@ -163,6 +163,11 @@ namespace CariBengkel.Repository.Entity.Model
                 entity.Property(e => e.Url)
                     .HasColumnName("url")
                     .HasMaxLength(100);
+
+                entity.HasOne(d => d.ParentNavigation)
+                    .WithMany(p => p.InverseParentNavigation)
+                    .HasForeignKey(d => d.Parent)
+                    .HasConstraintName("fk_parent");
             });
 
             modelBuilder.Entity<MenuRoleMap>(entity =>

@@ -7,6 +7,7 @@ namespace CariBengkel.Repository.Entity.Model
     {
         public Menu()
         {
+            InverseParentNavigation = new HashSet<Menu>();
             MenuRoleMap = new HashSet<MenuRoleMap>();
         }
 
@@ -16,6 +17,8 @@ namespace CariBengkel.Repository.Entity.Model
         public long? Parent { get; set; }
         public bool? Status { get; set; }
 
+        public virtual Menu ParentNavigation { get; set; }
+        public virtual ICollection<Menu> InverseParentNavigation { get; set; }
         public virtual ICollection<MenuRoleMap> MenuRoleMap { get; set; }
     }
 }
