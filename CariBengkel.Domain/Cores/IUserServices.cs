@@ -7,6 +7,6 @@ namespace CariBengkel.Domain.Cores {
         BaseResponse<User> Update (User model);
         BaseResponse<User> Delete (User model);
         BaseResponse<User> Get (User model);
-        BaseResponse<User> GetAll (User model);
+        BaseResponse<User> GetAll (string term, int limit, int index);
     }
 }

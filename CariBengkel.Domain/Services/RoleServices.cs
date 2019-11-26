@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using CariBengkel.Domain.Cores;
 using CariBengkel.Domain.Responses;
@@ -40,8 +41,9 @@ namespace CariBengkel.Domain.Services {
             try {
                 predicate = x => x.Id.Equals (model.Id);
                 var roleModel = _unitOfwork.GetRepository<Role> ().Single (predicate);
-                if (roleModel != null)
-                    throw new Exception ("ERROR-0006");
+                if (roleModel == null)
+                    throw new Exception ("ERROR-9998");
+
                 roleModel.Name = model.Name;
                 roleModel.Status = model.Status;
 
@@ -57,21 +59,21 @@ namespace CariBengkel.Domain.Services {
             return result;
         }
 
-        public BaseResponse<Role> Delete (Role model) {
+        public BaseResponse<Role> Delete (long id) {
             BaseResponse<Role> result = new BaseResponse<Role> ();
             Expression<Func<Role, bool>> predicate = null;
 
             try {
-                predicate = x => x.Id.Equals (model.Id);
+                predicate = x => x.Id.Equals (id);
                 var roleModel = _unitOfwork.GetRepository<Role> ().Single (predicate);
-                if (roleModel != null)
+                if (roleModel == null)
                     throw new Exception ("ERROR-0006");
 
                 _unitOfwork.GetRepository<Role> ().Delete (roleModel);
                 _unitOfwork.SaveChanges ();
 
                 result.Status = true;
-                result.Message = "INFO-0000";
+                result.Message = "INFO-0008";
             } catch (Exception ex) {
                 result.Message = ex.Message.Contains ("ERROR-") == false ? "ERROR-0000" : ex.Message;
             }
@@ -79,18 +81,18 @@ namespace CariBengkel.Domain.Services {
             return result;
         }
 
-        public BaseResponse<Role> Get (Role model) {
+        public BaseResponse<Role> Get (long id) {
             BaseResponse<Role> result = new BaseResponse<Role> ();
             Expression<Func<Role, bool>> predicate = null;
 
             try {
-                predicate = x => x.Id.Equals (model.Id);
+                predicate = x => x.Id.Equals (id);
                 var roleModel = _unitOfwork.GetRepository<Role> ().Single (predicate);
-                if (roleModel != null)
-                    throw new Exception ("ERROR-0006");
+                if (roleModel == null)
+                    throw new Exception ("ERROR-9998");
 
                 result.Status = true;
-                result.Message = "INFO-0000";
+                result.Message = "INFO-9999";
                 result.Data = roleModel;
             } catch (Exception ex) {
                 result.Message = ex.Message.Contains ("ERROR-") == false ? "ERROR-0000" : ex.Message;
@@ -99,15 +101,18 @@ namespace CariBengkel.Domain.Services {
             return result;
         }
 
-        public BaseResponse<Role> GetAll (Role model) {
+        public BaseResponse<Role> GetAll (string name, int limit, int index) {
             BaseResponse<Role> result = new BaseResponse<Role> ();
             Expression<Func<Role, bool>> predicate = null;
 
             try {
-                var listRole = _unitOfwork.GetRepository<Role> ().GetList (predicate);
+                if (!string.IsNullOrEmpty (name))
+                    predicate = x => x.Name.ToLower ().Contains (name.ToLower ());
+
+                var listRole = _unitOfwork.GetRepository<Role> ().GetList (predicate, index : index, size : limit, orderBy : src => src.OrderBy (x => x.Id));
 
                 result.Status = true;
-                result.Message = "INFO-0000";
+                result.Message = "INFO-9999";
                 result.ListData = listRole;
             } catch (Exception ex) {
                 result.Message = ex.Message.Contains ("ERROR-") == false ? "ERROR-0000" : ex.Message;

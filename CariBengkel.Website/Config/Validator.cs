@@ -12,7 +12,7 @@ namespace CariBengkel.Website.Config {
         public CredentialValidator () {
             RuleFor (cr => cr.Username).MaximumLength (50).NotNull ();
             RuleFor (cr => cr.Email).EmailAddress ().NotNull ();
-            RuleFor (cr => cr.Password).MaximumLength (20).NotNull ();
+            RuleFor (cr => cr.Password).MaximumLength (20).NotNull ().When (cr => cr.Id == 0);
         }
     }
 
@@ -34,6 +34,13 @@ namespace CariBengkel.Website.Config {
         public MenuValidator () {
             RuleFor (menu => menu.Title).NotNull ();
             RuleFor (menu => menu.Url).NotNull ();
+        }
+    }
+
+    public class RoleValidator : AbstractValidator<RoleViewModel> {
+        public RoleValidator () {
+            RuleFor (role => role.Name).NotNull ();
+            RuleFor (role => role.Status).NotNull ();
         }
     }
 }

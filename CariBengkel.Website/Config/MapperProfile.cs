@@ -9,6 +9,7 @@ namespace CariBengkel.Website.Config {
             CreateMap<UserViewModel, User> ()
                 .ForMember (dest => dest.IdCredentialNavigation, opt => opt.MapFrom (src => src.Credential));
             CreateMap<MenuViewModel, Menu> ();
+            CreateMap<RoleViewModel, Role> ();
         }
     }
 }

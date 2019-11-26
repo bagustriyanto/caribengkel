@@ -1,10 +1,13 @@
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using CariBengkel.Common;
+using CariBengkel.Common.Constant;
 using CariBengkel.Domain.Cores;
 using CariBengkel.Domain.Responses;
 using CariBengkel.Repository.Entity.Model;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Threenine.Data;
 
 namespace CariBengkel.Domain.Services {
@@ -61,9 +64,9 @@ namespace CariBengkel.Domain.Services {
             Expression<Func<Credentials, bool>> predicateCredential = null;
 
             try {
-                predicateCredential = x => x.Email.Contains (model.IdCredentialNavigation.Email) || x.Username.Contains (model.IdCredentialNavigation.Username);
+                predicateCredential = x => x.Id.Equals (model.IdCredentialNavigation.Id);
                 var credentialModel = _unitOfWork.GetRepository<Credentials> ().Single (predicateCredential);
-                if (credentialModel != null)
+                if (credentialModel == null)
                     throw new Exception ("ERROR-0003");
 
                 credentialModel.Username = model.IdCredentialNavigation.Username;
@@ -81,7 +84,7 @@ namespace CariBengkel.Domain.Services {
 
                 userModel.FirstName = model.FirstName;
                 userModel.LastName = model.LastName;
-                userModel.IdCredential = credentialModel.Id;
+                userModel.Phone = model.Phone;
                 userModel.ModifiedBy = model.IdCredentialNavigation.Username;
                 userModel.ModifiedOn = DateTime.Now;
                 userModel.ModifiedHost = _accessor.HttpContext.Connection.RemoteIpAddress.ToString ();
@@ -130,8 +133,24 @@ namespace CariBengkel.Domain.Services {
             return result;
         }
 
-        public BaseResponse<User> GetAll (User model) {
+        public BaseResponse<User> GetAll (string term, int limit, int index) {
             BaseResponse<User> result = new BaseResponse<User> ();
+            Expression<Func<User, bool>> predicate = null;
+
+            try {
+                if (!string.IsNullOrEmpty (term)) {
+                    predicate = prop => prop.FirstName.ToLower ().Contains (term) ||
+                        prop.LastName.ToLower ().Contains (term) || prop.IdCredentialNavigation.Username.ToLower ().Contains (term) ||
+                        prop.IdCredentialNavigation.Email.ToLower ().Contains (term);
+                }
+
+                result.ListData = _unitOfWork.GetReadOnlyRepository<User> ().GetList (predicate: predicate, orderBy: src => src.OrderBy (x => x.Id),
+                    include: src => src.Include (x => x.IdCredentialNavigation));
+                result.Status = true;
+                result.Message = Message.INFO9999;
+            } catch (Exception ex) {
+                result.Message = ex.Message.Contains ("ERROR-") == false ? Message.ERR0000 : ex.Message;
+            }
 
             return result;
         }

@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.Localization;
 
 namespace CariBengkel.Website.Controllers.Api {
     [ApiController]
-    [Route ("[controller]")]
+    [Route ("api/user")]
     public class UserApi : Controller {
         private readonly IMapper _mapper;
         private readonly IUserServices _userServices;
@@ -22,8 +22,6 @@ namespace CariBengkel.Website.Controllers.Api {
         }
 
         [HttpPost]
-        [ProducesResponseType (StatusCodes.Status201Created)]
-        [ProducesResponseType (StatusCodes.Status404NotFound)]
         public IActionResult Create (UserViewModel model) {
             var validator = new UserValidator ();
             var validate = validator.Validate (model);
@@ -37,7 +35,7 @@ namespace CariBengkel.Website.Controllers.Api {
             return Json (result);
         }
 
-        [HttpPut]
+        [HttpPut ("{id}")]
         [ProducesResponseType (StatusCodes.Status200OK)]
         [ProducesResponseType (StatusCodes.Status404NotFound)]
         public IActionResult Update (UserViewModel model) {
@@ -56,6 +54,14 @@ namespace CariBengkel.Website.Controllers.Api {
             var userModel = _mapper.Map<User> (model);
             var result = _userServices.Update (userModel);
 
+            result.Message = _localizer[result.Message].Value;
+
+            return Json (result);
+        }
+
+        [HttpGet]
+        public IActionResult Get (string term, int limit = 10, int index = 0) {
+            var result = _userServices.GetAll (term, limit, index);
             result.Message = _localizer[result.Message].Value;
 
             return Json (result);

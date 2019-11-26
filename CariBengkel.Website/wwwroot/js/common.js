@@ -4,7 +4,7 @@ const FORM_ADD = 0;
 const FORM_EDIT = 1;
 const FORM_VIEW = 2;
 const FORM_DELETE = 3;
-const ERROR_MESSAGE = "Terjadi Kesalahan.";
+const PASSWORD_LENGTH = 8;
 
 function checkboxCheckAll() {
     $("[data-checkboxes]").each(function () {
@@ -51,7 +51,6 @@ const alertMessage = function (message, type, callback) {
         case 2:
             title = 'Info';
             break;
-
     }
 
     swal({
@@ -64,3 +63,7 @@ const alertMessage = function (message, type, callback) {
 }
 
 axios.defaults.baseURL = 'https://localhost:5001/api/';
+
+Vue.use(window.vuelidate.default);
+// Vue.prototype.$lang = lang;
+

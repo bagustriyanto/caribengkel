@@ -1,0 +1,35 @@
+[
+    {
+        "outputFileName": "wwwroot/css/site.min.css",
+        "inputFiles": [
+            "wwwroot/modules/bootstrap/css/bootstrap.min.css",
+            "wwwroot/modules/fontawesome/css/all.min.css",
+            "wwwroot/css/style.css",
+            "wwwroot/css/components.css"
+        ]
+    },
+    {
+        "outputFileName": "wwwroot/js/site.min.js",
+        "inputFiles": [
+            "wwwroot/modules/jquery.min.js",
+            "wwwroot/modules/popper.js",
+            "wwwroot/modules/tooltip.js",
+            "wwwroot/modules/bootstrap/js/bootstrap.min.js",
+            "wwwroot/modules/nicescroll/jquery.nicescroll.min.js",
+            "wwwroot/modules/moment.min.js",
+            "wwwroot/modules/vue.js",
+            "wwwroot/modules/vue-cookies.js",
+            "wwwroot/modules/axios.min.js",
+            "wwwroot/modules/sweetalert/sweetalert.min.js",
+            "wwwroot/modules/vuelidate.min.js",
+            "wwwroot/modules/validators.min.js",
+            "wwwroot/js/stisla.js",
+            "wwwroot/js/common.js"
+        ],
+        "minify": {
+            "enabled": true,
+            "renameLocals": true
+        },
+        "sourceMap": false
+    }
+]

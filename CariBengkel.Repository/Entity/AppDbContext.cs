@@ -646,7 +646,9 @@ namespace CariBengkel.Repository.Entity.Model
 
                 entity.Property(e => e.ModifiedOn).HasColumnName("modified_on");
 
-                entity.Property(e => e.Phone).HasColumnName("phone");
+                entity.Property(e => e.Phone)
+                    .HasColumnName("phone")
+                    .HasColumnType("character varying");
 
                 entity.HasOne(d => d.IdCredentialNavigation)
                     .WithMany(p => p.User)
