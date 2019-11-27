@@ -10,30 +10,30 @@ using Microsoft.AspNetCore.Mvc.Localization;
 
 namespace CariBengkel.Website.Controllers.Api {
     [ApiController]
-    [Route ("api/user")]
-    public class UserApi : Controller {
+    [Route ("api/user-role")]
+    public class RoleMapApi : Controller {
         private readonly IMapper _mapper;
-        private readonly IUserServices _userServices;
+        private readonly IUserRoleMapServices _userRoleServices;
         private readonly IHtmlLocalizer<UserApi> _localizer;
-        public UserApi (IMapper mapper, IUserServices userServices, IHtmlLocalizer<UserApi> localizer) {
+        public RoleMapApi (IMapper mapper, IUserRoleMapServices userRoleServices, IHtmlLocalizer<UserApi> localizer) {
             _mapper = mapper;
-            _userServices = userServices;
+            _userRoleServices = userRoleServices;
             _localizer = localizer;
         }
 
         [HttpPost]
-        public IActionResult Create (UserViewModel model) {
-            var userModel = _mapper.Map<User> (model);
-            var result = _userServices.Create (userModel);
+        public IActionResult Create (RoleMapViewModel model) {
+            var userRoleModel = _mapper.Map<RoleMap> (model);
+            var result = _userRoleServices.Create (userRoleModel);
             result.Message = _localizer[result.Message].Value;
 
             return Json (result);
         }
 
         [HttpPut ("{id}")]
-        public IActionResult Update (UserViewModel model) {
-            var userModel = _mapper.Map<User> (model);
-            var result = _userServices.Update (userModel);
+        public IActionResult Update (RoleMapViewModel model) {
+            var userRoleModel = _mapper.Map<RoleMap> (model);
+            var result = _userRoleServices.Update (userRoleModel);
 
             result.Message = _localizer[result.Message].Value;
 
@@ -41,11 +41,11 @@ namespace CariBengkel.Website.Controllers.Api {
         }
 
         [HttpDelete]
-        [ProducesResponseType (StatusCodes.Status200OK)]
-        [ProducesResponseType (StatusCodes.Status404NotFound)]
-        public IActionResult Delete (UserViewModel model) {
-            var userModel = _mapper.Map<User> (model);
-            var result = _userServices.Update (userModel);
+        public IActionResult Delete (long id) {
+            if (id == 0)
+                return NotFound ();
+
+            var result = _userRoleServices.Delete (id);
 
             result.Message = _localizer[result.Message].Value;
 
@@ -54,7 +54,7 @@ namespace CariBengkel.Website.Controllers.Api {
 
         [HttpGet]
         public IActionResult Get (string term, int limit = 10, int index = 0) {
-            var result = _userServices.GetAll (term, limit, index);
+            var result = _userRoleServices.GetAll (term, limit, index);
             result.Message = _localizer[result.Message].Value;
 
             return Json (result);

@@ -6,6 +6,11 @@ namespace CariBengkel.Website.Config {
     public class InitializeValidator {
         public void Setup (FluentValidationMvcConfiguration config) {
             config.RegisterValidatorsFromAssemblyContaining<CredentialValidator> ();
+            config.RegisterValidatorsFromAssemblyContaining<LoginValidator> ();
+            config.RegisterValidatorsFromAssemblyContaining<UserValidator> ();
+            config.RegisterValidatorsFromAssemblyContaining<MenuValidator> ();
+            config.RegisterValidatorsFromAssemblyContaining<RoleValidator> ();
+            config.RegisterValidatorsFromAssemblyContaining<RoleMapValidator> ();
         }
     }
     public class CredentialValidator : AbstractValidator<CredentialViewModel> {
@@ -41,6 +46,13 @@ namespace CariBengkel.Website.Config {
         public RoleValidator () {
             RuleFor (role => role.Name).NotNull ();
             RuleFor (role => role.Status).NotNull ();
+        }
+    }
+
+    public class RoleMapValidator : AbstractValidator<RoleMapViewModel> {
+        public RoleMapValidator () {
+            RuleFor (role => role.CredentialId).NotNull ();
+            RuleFor (role => role.RoleId).NotNull ();
         }
     }
 }

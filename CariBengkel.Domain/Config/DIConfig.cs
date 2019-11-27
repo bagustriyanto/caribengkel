@@ -12,6 +12,7 @@ namespace CariBengkel.Domain.Config {
             services.AddScoped<IRoleServices, RoleServices> ();
             services.AddScoped<IMenuServices, MenuServices> ();
             services.AddScoped<ITokenServices, TokenServices> ();
+            services.AddScoped<IUserRoleMapServices, UserRoleMapServices> ();
         }
     }
 }

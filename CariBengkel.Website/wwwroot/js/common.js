@@ -1,10 +1,11 @@
 "use strict";
 
-const FORM_ADD = 0;
-const FORM_EDIT = 1;
-const FORM_VIEW = 2;
-const FORM_DELETE = 3;
-const PASSWORD_LENGTH = 8;
+const form_add = 0;
+const form_edit = 1;
+const form_view = 2;
+const form_delete = 3;
+const password_length = 8;
+const lang = Vue.prototype.$lang;
 
 function checkboxCheckAll() {
     $("[data-checkboxes]").each(function () {
@@ -36,7 +37,7 @@ function checkboxCheckAll() {
     });
 }
 
-const alertMessage = function (message, type, callback) {
+Vue.prototype.$alertMessage = function (message, type, callback) {
     let title = null;
     if (callback === null || callback === undefined)
         (callback) => { };
@@ -62,8 +63,35 @@ const alertMessage = function (message, type, callback) {
     }).then(callback);
 }
 
+Vue.prototype.$confirmDelete = function (url, param, responseCallback) {
+    if (param == null)
+        param = {};
+
+    swal("Anda yakin untuk menghapus data ini?", {
+        buttons: {
+            cancel: "Batal",
+            catch: {
+                text: "Yakin",
+                value: "submit",
+            }
+        },
+    }).then((value) => {
+        switch (value) {
+            case "submit":
+                axios.delete(url, {
+                    params: param
+                }).then(({ data }) => {
+                    let status = data.status ? 1 : 0;
+                    Vue.prototype.$alertMessage(data.message, status, responseCallback);
+                }).catch((response) => {
+                    Vue.prototype.$alertMessage(lang.ERROR0000, 0, responseCallback);
+                });
+                break;
+        }
+    });
+}
+
 axios.defaults.baseURL = 'https://localhost:5001/api/';
 
 Vue.use(window.vuelidate.default);
-// Vue.prototype.$lang = lang;
 

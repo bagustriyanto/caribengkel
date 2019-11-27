@@ -22,14 +22,7 @@ namespace CariBengkel.Website.Controllers.Api {
         }
 
         [HttpPost]
-        [ProducesResponseType (StatusCodes.Status201Created)]
-        [ProducesResponseType (StatusCodes.Status404NotFound)]
         public IActionResult Create (MenuViewModel model) {
-            var validator = new MenuValidator ();
-            var validate = validator.Validate (model);
-            if (!validate.IsValid)
-                return BadRequest (validate.Errors.ToString ());
-
             var userModel = _mapper.Map<Menu> (model);
             var result = _menuService.Create (userModel);
             result.Message = _localizer[result.Message].Value;
@@ -38,14 +31,7 @@ namespace CariBengkel.Website.Controllers.Api {
         }
 
         [HttpPut ("{id}")]
-        [ProducesResponseType (StatusCodes.Status200OK)]
-        [ProducesResponseType (StatusCodes.Status404NotFound)]
         public IActionResult Update (MenuViewModel model) {
-            var validator = new MenuValidator ();
-            var validate = validator.Validate (model);
-            if (!validate.IsValid)
-                return BadRequest (validate.Errors.ToString ());
-
             var userModel = _mapper.Map<Menu> (model);
             var result = _menuService.Update (userModel);
             result.Message = _localizer[result.Message].Value;
@@ -54,8 +40,6 @@ namespace CariBengkel.Website.Controllers.Api {
         }
 
         [HttpDelete]
-        [ProducesResponseType (StatusCodes.Status200OK)]
-        [ProducesResponseType (StatusCodes.Status404NotFound)]
         public IActionResult Delete (MenuViewModel model) {
             if (model.Id == 0)
                 return BadRequest ("Id Not found");
@@ -68,8 +52,6 @@ namespace CariBengkel.Website.Controllers.Api {
         }
 
         [HttpGet ("{id}")]
-        [ProducesResponseType (StatusCodes.Status200OK)]
-        [ProducesResponseType (StatusCodes.Status404NotFound)]
         public IActionResult Get (MenuViewModel model) {
             if (model.Id == 0)
                 return BadRequest ("Id Not found");

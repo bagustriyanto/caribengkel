@@ -31,5 +31,16 @@
             "renameLocals": true
         },
         "sourceMap": false
+    },
+    {
+        "outputFileName": "wwwroot/js/master/user.min.js",
+        "inputFiles": [
+            "wwwroot/js/apps/master/user.js"
+        ],
+        "minify": {
+            "enabled": true,
+            "renameLocals": true
+        },
+        "sourceMap": false
     }
 ]

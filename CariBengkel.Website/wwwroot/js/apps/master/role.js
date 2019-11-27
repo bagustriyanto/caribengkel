@@ -36,18 +36,18 @@ const masterRole = new Vue({
     },
     methods: {
         createClick: function () {
-            this.formType = 0;
+            this.formType = form_add;
             this.showForm = true;
             this.formReset();
         },
         editClick: function (item) {
-            this.formType = 1;
+            this.formType = form_edit;
             this.showForm = true;
             this.setForm(item);
             this.form.cbStatus = item.status === false ? '0' : '1'
         },
         viewClick: function (item) {
-            this.formType = 2;
+            this.formType = form_view;
             this.showForm = true;
             this.setForm(item);
             this.form.cbStatus = item.status === false ? '0' : '1'
@@ -82,7 +82,7 @@ const masterRole = new Vue({
             });
         },
         formCloseCallback: function (type) {
-            if (type !== 0) {
+            if (type !== form_add) {
                 this.formCancel();
                 this.formReset();
             }

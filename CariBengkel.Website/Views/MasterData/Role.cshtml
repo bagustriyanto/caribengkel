@@ -19,7 +19,7 @@ ViewBag.Title = $"{Localizer["lblmenu_master"].Value} - {Localizer["lblmenu_role
     <button hidden id='btnModalEdit' type="button"></button>
     <button hidden id='btnModalView' type="button"></button>
     <div class="row mt-4" v-if="showForm">
-        <form id="menuForm" autocomplete="off" style="width: 100%;" v-on:submit="onSubmit">
+        <form id="menuForm" autocomplete="off" style="width: 100%;" v-on:submit.prevent="onSubmit">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
@@ -84,7 +84,7 @@ ViewBag.Title = $"{Localizer["lblmenu_master"].Value} - {Localizer["lblmenu_role
                                 <input type="text" class="form-control" placeholder='@Localizer["placeholder_name"]'
                                     v-model="searchTerm">
                                 <div class="input-group-append">
-                                    <button class="btn btn-primary" v-on:click="searchMenu"><i
+                                    <button class="btn btn-primary" v-on:click.prevent="searchMenu"><i
                                             class="fas fa-search"></i></button>
                                 </div>
                             </div>

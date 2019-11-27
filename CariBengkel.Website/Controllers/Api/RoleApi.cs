@@ -42,11 +42,6 @@ namespace CariBengkel.Website.Controllers.Api {
 
         [HttpPost]
         public IActionResult Create (RoleViewModel model) {
-            var validator = new RoleValidator ();
-            var validate = validator.Validate (model);
-            if (!validate.IsValid)
-                return BadRequest (validate.Errors.ToString ());
-
             var mapper = _mapper.Map<Role> (model);
             var result = _roleServices.Create (mapper);
             result.Message = _localizer[result.Message].Value;
@@ -56,11 +51,6 @@ namespace CariBengkel.Website.Controllers.Api {
 
         [HttpPut ("{id}")]
         public IActionResult Update (RoleViewModel model) {
-            var validator = new RoleValidator ();
-            var validate = validator.Validate (model);
-            if (!validate.IsValid)
-                return BadRequest (validate.Errors.ToString ());
-
             var mapper = _mapper.Map<Role> (model);
             var result = _roleServices.Update (mapper);
             result.Message = _localizer[result.Message].Value;

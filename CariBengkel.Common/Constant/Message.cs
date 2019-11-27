@@ -7,6 +7,8 @@ namespace CariBengkel.Common.Constant {
         public const string ERR0004 = "ERROR-0004";
         public const string ERR0005 = "ERROR-0005";
         public const string ERR0006 = "ERROR-0006";
+        public const string ERR9997 = "ERROR-9997";
+        public const string ERR9998 = "ERROR-9998";
         public const string ERR9999 = "ERROR-9999";
 
         public const string INFO0000 = "INFO-0000";

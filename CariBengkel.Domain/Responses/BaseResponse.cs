@@ -8,6 +8,5 @@ namespace CariBengkel.Domain.Responses {
         public string Message { get; set; }
         public T Data { get; set; }
         public IPaginate<T> ListData { get; set; }
-        // public IList<T> ListData { get; set; }
     }
 }

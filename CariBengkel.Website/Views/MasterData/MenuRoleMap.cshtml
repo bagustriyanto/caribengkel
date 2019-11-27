@@ -1,0 +1,9 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@using System.Globalization;
+
+@inject IViewLocalizer Localizer
+
+@{
+Layout = "_MainLayout";
+ViewBag.Title = $"{Localizer["lblmenu_master"].Value} - {Localizer["lblmenu_menurolemap"].Value}";
+}

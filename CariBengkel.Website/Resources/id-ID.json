@@ -6,7 +6,8 @@
     "ERROR-0004": "Password yang anda masukkan salah.",
     "ERROR-0005": "Email tidak ditemukan.",
     "ERROR-0006": "Role sudah ada.",
-    "ERROR-9998": "Object tidak ditemukan.",
+    "ERROR-9997": "Duplikat objek",
+    "ERROR-9998": "Objek tidak ditemukan.",
     "ERROR-9999": "Objek sudah ada",
     "INFO-0000": "Simpan berhasil",
     "INFO-0001": "Register berhasil.",
@@ -29,6 +30,7 @@
     "label_email": "Email",
     "label_password": "Password",
     "label_phone": "Telepon",
+    "label_role": "Role",
     "placeholder_title": "Cari Judul",
     "placeholder_name": "Cari Nama",
     "placeholder_search": "Cari",
@@ -47,5 +49,7 @@
     "lblmenu_master": "Master Data",
     "lblmenu_menu": "Menu",
     "lblmenu_role": "Role",
-    "lblmenu_user": "User"
+    "lblmenu_user": "User",
+    "lblmenu_menurolemap": "Menu-Role Map",
+    "lblmenu_userrolemap": "User-Role Map"
 }

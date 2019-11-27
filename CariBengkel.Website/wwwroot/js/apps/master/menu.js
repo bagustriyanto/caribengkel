@@ -48,20 +48,20 @@ const masterMenu = new Vue({
     },
     methods: {
         createClick: function () {
-            this.formType = 0;
+            this.formType = form_add;
             this.showForm = true;
             this.formTitle = 'Buat Menu';
             this.formReset();
         },
         editClick: function (item) {
-            this.formType = 1;
+            this.formType = form_edit;
             this.showForm = true;
             this.formTitle = 'Ubah Menu';
             this.setForm(item);
             this.form.cbStatus = item.status === false ? '0' : '1'
         },
         viewClick: function (item) {
-            this.formType = 2;
+            this.formType = form_view;
             this.showForm = true;
             this.formTitle = 'Lihat Menu';
             this.setForm(item);

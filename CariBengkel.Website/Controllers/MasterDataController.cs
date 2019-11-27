@@ -23,5 +23,15 @@ namespace CariBengkel.Website.Controllers {
         public IActionResult Menu () {
             return View ();
         }
+
+        [Route ("menu-role-map")]
+        public IActionResult MenuRoleMap () {
+            return View ();
+        }
+
+        [Route ("user-role-map")]
+        public IActionResult UserRoleMap () {
+            return View ();
+        }
     }
 }

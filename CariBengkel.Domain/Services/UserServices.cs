@@ -145,7 +145,7 @@ namespace CariBengkel.Domain.Services {
                 }
 
                 result.ListData = _unitOfWork.GetReadOnlyRepository<User> ().GetList (predicate: predicate, orderBy: src => src.OrderBy (x => x.Id),
-                    include: src => src.Include (x => x.IdCredentialNavigation));
+                    include: src => src.Include (x => x.IdCredentialNavigation), size: limit, index: index);
                 result.Status = true;
                 result.Message = Message.INFO9999;
             } catch (Exception ex) {

@@ -41,7 +41,7 @@ const masterUser = new Vue({
                 email: {
                     required, email
                 },
-                password: { required, minLength: minLength(8) }
+                password: { required, minLength: minLength(password_length) }
             }
         }
     },
@@ -53,7 +53,7 @@ const masterUser = new Vue({
     },
     computed: {
         submitDisabled: function () {
-            if (this.formType === 0)
+            if (this.formType === form_add)
                 return this.$v.$invalid
             else if (this.formType === 1) {
                 let disabled = false;
@@ -66,18 +66,18 @@ const masterUser = new Vue({
     },
     methods: {
         createClick: function () {
-            this.formType = 0;
+            this.formType = form_add;
             this.showForm = true;
             this.formReset();
         },
         editClick: function (item) {
-            this.formType = 1;
+            this.formType = form_edit;
             this.showForm = true;
             this.setForm(item);
             this.form.cbStatus = item.idCredentialNavigation.status === false ? '0' : '1'
         },
         viewClick: function (item) {
-            this.formType = 2;
+            this.formType = form_view;
             this.showForm = true;
             this.setForm(item);
             this.form.cbStatus = item.idCredentialNavigation.status === false ? '0' : '1'
@@ -118,7 +118,7 @@ const masterUser = new Vue({
             });
         },
         formCloseCallback: function (type) {
-            if (type !== 0) {
+            if (type !== form_add) {
                 this.formCancel();
                 this.formReset();
             }
