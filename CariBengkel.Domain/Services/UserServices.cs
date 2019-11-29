@@ -24,12 +24,12 @@ namespace CariBengkel.Domain.Services {
             Expression<Func<Credentials, bool>> predicateCredential = null;
 
             try {
-                predicateCredential = x => x.Email.Contains (model.IdCredentialNavigation.Email);
+                predicateCredential = x => x.Email.Equals (model.IdCredentialNavigation.Email);
                 var credentialModel = _unitOfWork.GetRepository<Credentials> ().Single (predicateCredential);
                 if (credentialModel != null)
                     throw new Exception ("ERROR-0001");
 
-                predicateCredential = x => x.Username.Contains (model.IdCredentialNavigation.Username);
+                predicateCredential = x => x.Username.Equals (model.IdCredentialNavigation.Username);
                 credentialModel = _unitOfWork.GetRepository<Credentials> ().Single (predicateCredential);
                 if (credentialModel != null)
                     throw new Exception ("ERROR-0002");

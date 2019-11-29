@@ -1,12 +1,15 @@
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 using CariBengkel.Common;
 using CariBengkel.Domain.Cores;
 using CariBengkel.Domain.Dto;
 using CariBengkel.Domain.Responses;
 using CariBengkel.Repository.Entity.Model;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.EntityFrameworkCore;
 using Threenine.Data;
 
 namespace CariBengkel.Domain.Services {
@@ -18,7 +21,7 @@ namespace CariBengkel.Domain.Services {
             _unitOfWork = unitOfWork;
             _tokenServices = tokenServices;
         }
-        public BaseResponse<Credentials> Login (Credentials model) {
+        public async Task<BaseResponse<Credentials>> Login (Credentials model) {
             BaseResponse<Credentials> result = new BaseResponse<Credentials> ();
             Expression<Func<Credentials, bool>> predicate = null;
 
@@ -26,7 +29,7 @@ namespace CariBengkel.Domain.Services {
                 if (!string.IsNullOrEmpty (model.Username))
                     predicate = x => x.Username.Equals (model.Username) || x.Email.Equals (model.Username);
 
-                var credential = _unitOfWork.GetRepository<Credentials> ().Single (predicate, null, null);
+                var credential = await _unitOfWork.GetRepositoryAsync<Credentials> ().SingleAsync (predicate, include : src => src.Include (c => c.RoleMap).ThenInclude (r => r.Role));
 
                 if (credential == null)
                     throw new Exception ("ERROR-0003");
@@ -38,7 +41,16 @@ namespace CariBengkel.Domain.Services {
                     throw new Exception ("ERROR-0004");
 
                 // get role and create jwt token
+                // var role = await _unitOfWork.GetRepositoryAsync<RoleMap> ().SingleAsync (predicate: src => src.CredentialId.Equals (credential.Id), include: src => src.Include (x => x.Role));
+                var role = credential.RoleMap.FirstOrDefault ();
+                var token = _tokenServices.CreateToken (credential.Username, role.Role.Name);
 
+                // remove credential sensitive information
+                credential.Password = string.Empty;
+                credential.Salt = string.Empty;
+
+                result.Data = credential;
+                result.Token = token;
                 result.Message = "INFO-0002";
                 result.Status = true;
             } catch (Exception ex) {

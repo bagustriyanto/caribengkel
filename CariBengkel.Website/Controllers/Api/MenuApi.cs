@@ -4,11 +4,14 @@ using CariBengkel.Domain.Cores;
 using CariBengkel.Repository.Entity.Model;
 using CariBengkel.Website.Config;
 using CariBengkel.Website.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
 
 namespace CariBengkel.Website.Controllers.Api {
+    [Authorize (AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [Route ("api/menu")]
     public class MenuApi : Controller {
@@ -40,12 +43,11 @@ namespace CariBengkel.Website.Controllers.Api {
         }
 
         [HttpDelete]
-        public IActionResult Delete (MenuViewModel model) {
-            if (model.Id == 0)
+        public IActionResult Delete (long id) {
+            if (id == 0)
                 return BadRequest ("Id Not found");
 
-            var userModel = _mapper.Map<Menu> (model);
-            var result = _menuService.Delete (userModel);
+            var result = _menuService.Delete (id);
             result.Message = _localizer[result.Message].Value;
 
             return Json (result);
@@ -66,7 +68,10 @@ namespace CariBengkel.Website.Controllers.Api {
         [HttpGet]
         [ProducesResponseType (StatusCodes.Status200OK)]
         [ProducesResponseType (StatusCodes.Status404NotFound)]
-        public IActionResult GetAll (string title, int limit = 20, int index = 0) {
+        public IActionResult GetAll (string title, int limit = 10, int index = 0) {
+            if (index != 0)
+                index--;
+
             var result = _menuService.GetList (title, limit, index);
             result.Message = _localizer[result.Message].Value;
 

@@ -1,6 +1,6 @@
 @{ Layout = "_LayoutLogin"; }
 
-<div id="app">
+<div id="login" v-cloak>
     <section class="section">
         <div class="container mt-5">
             <div class="row">
@@ -15,12 +15,16 @@
                         </div>
 
                         <div class="card-body">
-                            <form method="POST" action="#" class="needs-validation" novalidate="">
+                            <form class="needs-validation" novalidate="" v-on:submit.prevent="submit"
+                                autocomplete="off">
                                 <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input id="email" type="email" class="form-control" name="email" tabindex="1" required autofocus>
-                                    <div class="invalid-feedback">
-                                        Please fill in your email
+                                    <label for="username">{{$lang.label_username}}</label>
+                                    <input id="username" type="text" class="form-control" name="username"
+                                        v-model="form.username" tabindex="1" required autofocus
+                                        v-on:blur="formTriggered = true"
+                                        v-bind:class="{'is-invalid': !$v.form.username.required && formTriggered}">
+                                    <div class="invalid-feedback" v-if="!$v.form.username.required">
+                                        {{$lang.form_required}}
                                     </div>
                                 </div>
 
@@ -33,15 +37,18 @@
                                             </a>
                                         </div>
                                     </div>
-                                    <input id="password" type="password" class="form-control" name="password" tabindex="2" required>
-                                    <div class="invalid-feedback">
-                                        please fill in your password
+                                    <input id="password" type="password" class="form-control" name="password"
+                                        v-model="form.password" tabindex="2" required
+                                        v-bind:class="{'is-invalid': !$v.form.password.required && formTriggered}">
+                                    <div class="invalid-feedback" v-if="!$v.form.password.required">
+                                        {{$lang.form_required}}
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" name="remember" class="custom-control-input" tabindex="3" id="remember-me">
+                                        <input type="checkbox" name="remember" class="custom-control-input" tabindex="3"
+                                            id="remember-me">
                                         <label class="custom-control-label" for="remember-me">Remember Me</label>
                                     </div>
                                 </div>
@@ -52,22 +59,6 @@
                                     </button>
                                 </div>
                             </form>
-                            <div class="text-center mt-4 mb-3">
-                                <div class="text-job text-muted">Login With Social</div>
-                            </div>
-                            <div class="row sm-gutters">
-                                <div class="col-6">
-                                    <a class="btn btn-block btn-social btn-facebook">
-                                        <span class="fab fa-facebook"></span> Facebook
-                                    </a>
-                                </div>
-                                <div class="col-6">
-                                    <a class="btn btn-block btn-social btn-twitter">
-                                        <span class="fab fa-twitter"></span> Twitter
-                                    </a>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
                     <div class="mt-5 text-muted text-center">
@@ -81,3 +72,4 @@
         </div>
     </section>
 </div>
+<script src="~/js/apps/auth/login.js"></script>

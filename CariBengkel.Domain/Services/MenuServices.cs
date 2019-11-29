@@ -61,17 +61,17 @@ namespace CariBengkel.Domain.Services {
             return result;
         }
 
-        public BaseResponse<Menu> Delete (Menu model) {
+        public BaseResponse<Menu> Delete (long id) {
             BaseResponse<Menu> result = new BaseResponse<Menu> ();
             Expression<Func<Menu, bool>> predicate = null;
 
             try {
-                predicate = x => x.Id.Equals (model.Id);
+                predicate = x => x.Id.Equals (id);
                 var menuModel = _unitOfWork.GetRepository<Menu> ().Single (predicate);
                 if (menuModel == null)
                     throw new Exception (Message.ERR9999);
 
-                _unitOfWork.GetRepository<Menu> ().Delete (menuModel);
+                _unitOfWork.GetRepository<Menu> ().Delete (id);
                 _unitOfWork.SaveChanges ();
 
                 result.Status = true;

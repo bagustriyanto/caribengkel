@@ -1,10 +1,11 @@
+using System.Threading.Tasks;
 using CariBengkel.Domain.Dto;
 using CariBengkel.Domain.Responses;
 using CariBengkel.Repository.Entity.Model;
 
 namespace CariBengkel.Domain.Cores {
     public interface IAuthServices {
-        BaseResponse<Credentials> Login (Credentials model);
+        Task<BaseResponse<Credentials>> Login (Credentials model);
         BaseResponse<Credentials> Register (Credentials model);
         BaseResponse<Credentials> ResetPassword (DtoCredential model);
         BaseResponse<Credentials> ForgotPassword (Credentials model);

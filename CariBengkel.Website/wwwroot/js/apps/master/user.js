@@ -92,10 +92,10 @@ const masterUser = new Vue({
                     data: this.form
                 }).then(({ data }) => {
                     let status = data.status ? 1 : 0;
-                    alertMessage(data.message, status, this.formCloseCallback(status));
+                    this.$alertMessage(data.message, status, this.formCloseCallback(status));
                     this.getAll();
                 }).catch((response) => {
-                    alertMessage(this.$lang.ERROR0000, 0, this.formCloseCallback(0));
+                    this.$alertMessage(this.$lang.ERROR0000, 0, this.formCloseCallback(0));
                 });
             } else {
                 axios({
@@ -104,10 +104,10 @@ const masterUser = new Vue({
                     data: this.form
                 }).then(({ data }) => {
                     let status = data.status ? 1 : 0;
-                    alertMessage(data.message, status, this.formCloseCallback(status));
+                    this.$alertMessage(data.message, status, this.formCloseCallback(status));
                     this.getAll();
                 }).catch(() => {
-                    alertMessage(this.$lang.ERROR0000, 0, this.formCloseCallback(0));
+                    this.$alertMessage(this.$lang.ERROR0000, 0, this.formCloseCallback(0));
                 });
             }
 

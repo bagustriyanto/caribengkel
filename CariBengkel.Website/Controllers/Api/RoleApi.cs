@@ -4,11 +4,14 @@ using CariBengkel.Domain.Cores;
 using CariBengkel.Repository.Entity.Model;
 using CariBengkel.Website.Config;
 using CariBengkel.Website.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
 
 namespace CariBengkel.Website.Controllers.Api {
+    [Authorize (AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [Route ("api/role")]
     public class RoleApi : Controller {

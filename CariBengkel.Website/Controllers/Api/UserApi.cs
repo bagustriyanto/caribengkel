@@ -1,14 +1,19 @@
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using AutoMapper;
 using CariBengkel.Domain.Cores;
 using CariBengkel.Repository.Entity.Model;
 using CariBengkel.Website.Config;
 using CariBengkel.Website.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
+using Microsoft.AspNetCore.Server.HttpSys;
 
 namespace CariBengkel.Website.Controllers.Api {
+    [Authorize (AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [Route ("api/user")]
     public class UserApi : Controller {

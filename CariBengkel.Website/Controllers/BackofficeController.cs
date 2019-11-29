@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using CariBengkel.Website.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CariBengkel.Website.Controllers {
+    [Authorize (AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     [Route ("system")]
     public class BackofficeController : Controller {
         public IActionResult Index () {

@@ -6,36 +6,14 @@ const form_view = 2;
 const form_delete = 3;
 const password_length = 8;
 const lang = Vue.prototype.$lang;
+const baseUrl = 'https://localhost:5001';
 
-function checkboxCheckAll() {
-    $("[data-checkboxes]").each(function () {
-        var me = $(this),
-            group = me.data('checkboxes'),
-            role = me.data('checkbox-role');
+axios.defaults.baseURL = `${baseUrl}/api`;
+if ($cookies.get('token') !== null)
+    axios.defaults.headers.common['Authorization'] = `Bearer ${$cookies.get('token')}`;
 
-        me.change(function () {
-            var all = $('[data-checkboxes="' + group + '"]:not([data-checkbox-role="dad"])'),
-                checked = $('[data-checkboxes="' + group + '"]:not([data-checkbox-role="dad"]):checked'),
-                dad = $('[data-checkboxes="' + group + '"][data-checkbox-role="dad"]'),
-                total = all.length,
-                checked_length = checked.length;
-
-            if (role == 'dad') {
-                if (me.is(':checked')) {
-                    all.prop('checked', true);
-                } else {
-                    all.prop('checked', false);
-                }
-            } else {
-                if (checked_length >= total) {
-                    dad.prop('checked', true);
-                } else {
-                    dad.prop('checked', false);
-                }
-            }
-        });
-    });
-}
+Vue.use(window.vuelidate.default);
+$cookies.config('7d');
 
 Vue.prototype.$alertMessage = function (message, type, callback) {
     let title = null;
@@ -91,7 +69,33 @@ Vue.prototype.$confirmDelete = function (url, param, responseCallback) {
     });
 }
 
-axios.defaults.baseURL = 'https://localhost:5001/api/';
+function checkboxCheckAll() {
+    $("[data-checkboxes]").each(function () {
+        var me = $(this),
+            group = me.data('checkboxes'),
+            role = me.data('checkbox-role');
 
-Vue.use(window.vuelidate.default);
+        me.change(function () {
+            var all = $('[data-checkboxes="' + group + '"]:not([data-checkbox-role="dad"])'),
+                checked = $('[data-checkboxes="' + group + '"]:not([data-checkbox-role="dad"]):checked'),
+                dad = $('[data-checkboxes="' + group + '"][data-checkbox-role="dad"]'),
+                total = all.length,
+                checked_length = checked.length;
+
+            if (role == 'dad') {
+                if (me.is(':checked')) {
+                    all.prop('checked', true);
+                } else {
+                    all.prop('checked', false);
+                }
+            } else {
+                if (checked_length >= total) {
+                    dad.prop('checked', true);
+                } else {
+                    dad.prop('checked', false);
+                }
+            }
+        });
+    });
+}
 

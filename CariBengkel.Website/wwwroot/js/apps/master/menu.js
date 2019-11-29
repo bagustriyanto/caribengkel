@@ -1,5 +1,10 @@
+const paginate = Vue.component('paginate', VuejsPaginate);
+
 const masterMenu = new Vue({
     el: '#masterMenu',
+    components: {
+        paginate
+    },
     data: {
         formType: 0,
         form: {
@@ -23,7 +28,7 @@ const masterMenu = new Vue({
         searchTerm: null,
         paging: {
             page: 0,
-            perPage: 0
+            number: 0
         }
     },
     mounted() {
@@ -67,6 +72,18 @@ const masterMenu = new Vue({
             this.setForm(item);
             this.form.cbStatus = item.status === false ? '0' : '1'
         },
+        deleteClick: function ({ id }) {
+            let _this = this;
+            let url = '/menu';
+            let param = {
+                id: id
+            };
+            const callback = function () {
+                _this.getAll();
+            }
+
+            this.$confirmDelete(url, param, callback);
+        },
         onSubmit: function () {
             this.form.status = this.form.cbStatus === '0' ? false : true;
             this.form.parent = this.form.parent === "" ? null : this.form.parent;
@@ -74,25 +91,34 @@ const masterMenu = new Vue({
             if (this.formType === 0) {
                 axios.post('/menu', this.form)
                     .then((response) => {
-                        alertMessage(response.data.message, 1, this.formCloseCallback(1));
+                        this.$alertMessage(response.data.message, 1, this.formCloseCallback(1));
                         this.getAll();
                     }).catch((response) => {
-                        alertMessage(ERROR_MESSAGE, 0, this.formCloseCallback(0));
+                        this.$alertMessage(ERROR_MESSAGE, 0, this.formCloseCallback(0));
                     });
             } else {
                 axios.put(`/menu/${this.form.id}`, this.form)
                     .then(({ data }) => {
-                        alertMessage(data.message, 1, this.formCloseCallback(1));
+                        this.$alertMessage(data.message, 1, this.formCloseCallback(1));
                         this.getAll();
                     }).catch(() => {
-                        alertMessage(ERROR_MESSAGE, 0, this.formCloseCallback(0));
+                        this.$alertMessage(ERROR_MESSAGE, 0, this.formCloseCallback(0));
                     });
             }
 
         },
-        getAll: function () {
-            axios.get('/menu').then(({ data }) => {
+        getAll: function (page) {
+            let param = {
+                index: page
+            };
+            if (page === null || page === undefined)
+                param = {};
+
+            axios.get('/menu', {
+                params: param
+            }).then(({ data }) => {
                 this.list = data.listData.items;
+                this.paging.page = data.listData.pages;
             });
         },
         getCbMenu: function () {
@@ -134,6 +160,9 @@ const masterMenu = new Vue({
             this.form.url = url;
             this.form.parent = parent;
             this.form.cbStatus = status ? '1' : '0'
+        },
+        pagingClick: function (pageNumber) {
+            this.getAll(pageNumber);
         }
     }
 });

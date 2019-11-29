@@ -12,6 +12,7 @@ using CariBengkel.Website.Config;
 using CariBengkel.Website.Models;
 using FluentValidation.AspNetCore;
 using LocalizationCultureCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -57,21 +58,27 @@ namespace CariBengkel.Website {
             services.AddAutoMapper (typeof (MapperProfile));
 
             // jwt auth
-            services.AddAuthentication (opt => {
-                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer (opt => {
-                opt.RequireHttpsMetadata = false;
-                opt.SaveToken = true;
-                opt.TokenValidationParameters = new TokenValidationParameters {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey (Encoding.ASCII.GetBytes (token.Secret)),
-                    ValidIssuer = token.Issuer,
-                    ValidAudience = token.Audience,
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
+            services.AddAuthentication (JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer (opt => {
+                    opt.RequireHttpsMetadata = false;
+                    opt.SaveToken = true;
+                    opt.TokenValidationParameters = new TokenValidationParameters {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey (Encoding.ASCII.GetBytes (token.Secret)),
+                        ValidIssuer = token.Issuer,
+                        ValidAudience = token.Audience,
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
+            services.AddAuthentication (CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie (opt => {
+                    opt.AccessDeniedPath = "/error";
+                    opt.LoginPath = "/login";
+                    opt.LogoutPath = "/logout";
+                    opt.SlidingExpiration = false;
+                    opt.ExpireTimeSpan = TimeSpan.FromMinutes (30);
+                });
 
             // localization
             services.AddJsonLocalization (opt => opt.ResourcesPath = "Resources");
@@ -104,6 +111,7 @@ namespace CariBengkel.Website {
             app.UseHttpsRedirection ();
             app.UseStaticFiles ();
             app.UseCookiePolicy ();
+            app.UseAuthentication ();
 
             app.UseMvc (routes => {
                 routes.MapRoute (
