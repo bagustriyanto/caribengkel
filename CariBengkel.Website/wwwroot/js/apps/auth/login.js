@@ -25,7 +25,14 @@ var login = new Vue({
             }).then(({ data }) => {
                 if (data.status) {
                     this.$cookies.set('token', data.token);
-                    window.location.replace(`${baseUrl}/system/master/user`);
+                    this.$cookies.set('username', this.form.username);
+
+                    let windowSearch = decodeURIComponent(window.location.search).split('=');
+                    let returnUrl = windowSearch[windowSearch.length - 1];
+                    if (returnUrl == '')
+                        window.location.replace(`${baseUrl}`);
+                    else
+                        window.location.replace(`${baseUrl}${returnUrl}`);
                 }
             })
         }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using CariBengkel.Website.Models;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -53,6 +54,14 @@ namespace CariBengkel.Website.Config {
         public RoleMapValidator () {
             RuleFor (role => role.CredentialId).NotNull ();
             RuleFor (role => role.RoleId).NotNull ();
+        }
+    }
+
+    public class MenuMapValidator : AbstractValidator<MenuMapViewModel> {
+        public MenuMapValidator () {
+            RuleFor (menu => menu.MenuRoleMap.Id).NotNull ();
+            RuleFor (menu => menu.MenuRoleMap.RoleId).NotNull ();
+            RuleFor (menu => menu.MenuRoleMap.MenuId).NotNull ();
         }
     }
 }

@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using AutoMapper;
+using CariBengkel.Repository.Entity.Custom;
 using CariBengkel.Repository.Entity.Model;
 using CariBengkel.Website.Models;
 
@@ -11,6 +13,9 @@ namespace CariBengkel.Website.Config {
             CreateMap<MenuViewModel, Menu> ();
             CreateMap<RoleViewModel, Role> ();
             CreateMap<RoleMapViewModel, RoleMap> ();
+            CreateMap<MenuMapViewModel, CustomMenuMap> ()
+                .ForMember (dest => dest.MenuRoleMap, opt => opt.MapFrom (src => src.MenuRoleMap));
+
         }
     }
 }

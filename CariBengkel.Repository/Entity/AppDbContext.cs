@@ -83,6 +83,8 @@ namespace CariBengkel.Repository.Entity.Model
                     .HasColumnName("password")
                     .HasMaxLength(255);
 
+                entity.Property(e => e.PublicUser).HasColumnName("public_user");
+
                 entity.Property(e => e.Salt)
                     .HasColumnName("salt")
                     .HasMaxLength(255)
@@ -178,19 +180,19 @@ namespace CariBengkel.Repository.Entity.Model
                     .HasColumnName("id")
                     .UseNpgsqlIdentityByDefaultColumn();
 
-                entity.Property(e => e.IdMenu).HasColumnName("id_menu");
+                entity.Property(e => e.MenuId).HasColumnName("menu_id");
 
-                entity.Property(e => e.IdRole).HasColumnName("id_role");
+                entity.Property(e => e.RoleId).HasColumnName("role_id");
 
-                entity.HasOne(d => d.IdMenuNavigation)
+                entity.HasOne(d => d.Menu)
                     .WithMany(p => p.MenuRoleMap)
-                    .HasForeignKey(d => d.IdMenu)
+                    .HasForeignKey(d => d.MenuId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("menu_role_map_fk");
 
-                entity.HasOne(d => d.IdRoleNavigation)
+                entity.HasOne(d => d.Role)
                     .WithMany(p => p.MenuRoleMap)
-                    .HasForeignKey(d => d.IdRole)
+                    .HasForeignKey(d => d.RoleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("menu_role_map_fk_1");
             });

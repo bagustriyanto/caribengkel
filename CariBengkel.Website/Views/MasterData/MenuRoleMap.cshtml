@@ -7,3 +7,160 @@
 Layout = "_MainLayout";
 ViewBag.Title = $"{Localizer["lblmenu_master"].Value} - {Localizer["lblmenu_menurolemap"].Value}";
 }
+
+<div id='masterMenuRoleMap'>
+    <div class="section-header">
+        <h1>{{$lang.lblmenu_menurolemap}}</h1>
+        <div class="section-header-breadcrumb">
+            <div class="breadcrumb-item active"><a href="#">{{$lang.lblmenu_master}}</a></div>
+            <div class="breadcrumb-item">{{$lang.lblmenu_menurolemap}}</div>
+        </div>
+    </div>
+    <div>
+        <div class="row mt-4" v-if="showForm">
+            <form id="menuForm" autocomplete="off" style="width: 100%;" v-on:submit.prevent="submit">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>{{ formType === 0 ? `${$lang.action_add} ${$lang.lblmenu_menurolemap}` : formType === 1 ? `${$lang.action_update} ${$lang.lblmenu_menurolemap}` : `${$lang.action_view} ${$lang.lblmenu_menurolemap}`}}
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row mb-4">
+                                <label
+                                    class="col-form-label text-md-right col-12 col-md-3 col-lg-3">{{$lang.label_role}}</label>
+                                <div class="col-sm-12 col-md-2">
+                                    <select class="form-control selectric" v-model="form.roleId">
+                                        <option v-for="(item, index) in roleList" :key="index" v-bind:value="item.id">
+                                            {{item.name}}</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        {{$lang.form_required}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-4">
+                                <label
+                                    class="col-form-label text-md-right col-12 col-md-3 col-lg-3">{{$lang.label_menu}}</label>
+                                <div class="form-group col-sm-12 col-md-2">
+                                    <div class="form-check" v-for="(item, index) in menuList" :key="index">
+                                        <input class="form-check-input" type="checkbox" v-bind:id="'checkbox-'+item.id"
+                                            v-model="item.checked">
+                                        <label class="form-check-label" v-bind:for="'checkbox-'+item.id">
+                                            {{item.title}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-4">
+                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
+                            <div class="col-sm-12 col-md-7" style="text-align: right;">
+                                <button class="btn btn-danger" v-on:click="formCancel">{{$lang.action_cancel}}</button>
+                                <button class="btn btn-primary"
+                                    v-if="formType === 0 || formType === 1">{{$lang.action_save}}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        </form>
+    </div>
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="float-left">
+                        <select class="form-control selectric">
+                            <option>Pilih Aksi</option>
+                            <option>Hapus Semua</option>
+                        </select>
+                    </div>
+                    <!-- <div class="float-left">
+                        <button class="btn btn-lg btn-success btn-create" style="margin-left: 10px;"
+                            v-on:click="createClick"><i class="far fa-edit"></i>
+                            {{`${$lang.action_add} ${$lang.lblmenu_menurolemap}`}}</button>
+                    </div> -->
+                    <div class="float-right">
+                        <form>
+                            <div class="input-group">
+                                <input type="text" class="form-control" v-bind:placeholder="$lang.placeholder_search"
+                                    v-model="searchTerm">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" v-on:click.prevent="searchMenu"><i
+                                            class="fas fa-search"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="clearfix mb-3"></div>
+
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="text-center pt-2">
+                                        <div class="custom-checkbox custom-checkbox-table custom-control">
+                                            <input type="checkbox" data-checkboxes="mygroup" data-checkbox-role="dad"
+                                                class="custom-control-input" id="checkbox-all">
+                                            <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
+                                        </div>
+                                    </th>
+                                    <th>{{$lang.label_role}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item, index) in menuRoleList" :key="index">
+                                    <td>
+                                        <div class="custom-checkbox custom-control">
+                                            <input type="checkbox" data-checkboxes="mygroup"
+                                                class="custom-control-input" id="checkbox-2">
+                                            <label for="checkbox-2" class="custom-control-label">&nbsp;</label>
+                                        </div>
+                                    </td>
+                                    <td>{{item.name}}
+                                        <div class="table-links">
+                                            <a href="#" v-on:click="viewClick(item)">{{$lang.action_view}}</a>
+                                            <div class="bullet"></div>
+                                            <a href="#" v-on:click="editClick(item)">{{$lang.action_update}}</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="float-right">
+                        <nav>
+                            <ul class="pagination">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                                <li class="page-item active">
+                                    <a class="page-link" href="#">1</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">2</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">3</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="~/js/apps/master/menu-role-map.js"></script>

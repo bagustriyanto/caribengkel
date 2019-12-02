@@ -27,5 +27,19 @@ namespace CariBengkel.Website.Controllers {
 
             return Content (result.ToString ());
         }
+
+        [Route ("menu")]
+        [ResponseCache (Duration = 600, Location = ResponseCacheLocation.Any, NoStore = false)]
+        public IActionResult Menu () {
+            Response.ContentType = "application/javascript";
+
+            if (HttpContext.User.Identity.IsAuthenticated) {
+                // get information user from session and passing to vuejs
+            } else {
+
+            }
+
+            return Content ("");
+        }
     }
 }

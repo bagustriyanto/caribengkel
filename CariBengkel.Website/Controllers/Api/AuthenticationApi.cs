@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
+using Newtonsoft.Json;
 
 namespace CariBengkel.Website.Controllers.Api {
     [Authorize (AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -31,9 +32,8 @@ namespace CariBengkel.Website.Controllers.Api {
 
         [AllowAnonymous]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Route ("login")]
-        public async Task<ActionResult> Login (CredentialViewModel credential) {
+        public async Task<IActionResult> Login (CredentialViewModel credential) {
             var modelCredentials = _mapper.Map<Credentials> (credential);
             var result = await _authService.Login (modelCredentials);
 
@@ -47,8 +47,10 @@ namespace CariBengkel.Website.Controllers.Api {
             ClaimsPrincipal principal = new ClaimsPrincipal (identity);
 
             await AuthenticationHttpContextExtensions.SignInAsync (HttpContext, CookieAuthenticationDefaults.AuthenticationScheme, principal);
+            HttpContext.Session.SetString ("user", JsonConvert.SerializeObject (result.Data));
 
             result.Message = _localizer[result.Message].Value;
+            result.Data = null;
 
             return Json (result);
         }
@@ -56,7 +58,7 @@ namespace CariBengkel.Website.Controllers.Api {
         [AllowAnonymous]
         [HttpPost]
         [Route ("register")]
-        public ActionResult Register (CredentialViewModel credential) {
+        public IActionResult Register (CredentialViewModel credential) {
             credential.Status = true;
             var modelCredentials = _mapper.Map<Credentials> (credential);
 
@@ -64,6 +66,16 @@ namespace CariBengkel.Website.Controllers.Api {
             result.Message = _localizer[result.Message].Value;
 
             return Json (result);
+        }
+
+        [HttpPost]
+        [Route ("logout")]
+        public IActionResult Logout () {
+
+            AuthenticationHttpContextExtensions.SignOutAsync (HttpContext);
+            HttpContext.Session.Clear ();
+
+            return Ok ();
         }
     }
 }

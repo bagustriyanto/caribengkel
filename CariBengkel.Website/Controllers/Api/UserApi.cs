@@ -46,8 +46,6 @@ namespace CariBengkel.Website.Controllers.Api {
         }
 
         [HttpDelete]
-        [ProducesResponseType (StatusCodes.Status200OK)]
-        [ProducesResponseType (StatusCodes.Status404NotFound)]
         public IActionResult Delete (UserViewModel model) {
             var userModel = _mapper.Map<User> (model);
             var result = _userServices.Update (userModel);

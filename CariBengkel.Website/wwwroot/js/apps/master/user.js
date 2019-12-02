@@ -9,7 +9,8 @@ const masterUser = new Vue({
                 username: null,
                 password: null,
                 email: null,
-                id: 0
+                id: 0,
+                publicUser: false
             },
             firstname: null,
             lastname: null,

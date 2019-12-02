@@ -24,6 +24,7 @@ namespace CariBengkel.Repository.Entity.Model
         public DateTime? ModifiedOn { get; set; }
         public string ModifiedHost { get; set; }
         public string VerificationCode { get; set; }
+        public bool? PublicUser { get; set; }
 
         public virtual ICollection<RoleMap> RoleMap { get; set; }
         public virtual ICollection<User> User { get; set; }

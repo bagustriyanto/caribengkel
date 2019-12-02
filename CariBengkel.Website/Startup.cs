@@ -5,24 +5,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.EquivalencyExpression;
 using CariBengkel.Domain.Config;
 using CariBengkel.Repository.Entity.Custom;
 using CariBengkel.Repository.Entity.Model;
 using CariBengkel.Website.Config;
-using CariBengkel.Website.Models;
 using FluentValidation.AspNetCore;
-using LocalizationCultureCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Threenine.Data.DependencyInjection;
 
@@ -45,6 +44,9 @@ namespace CariBengkel.Website {
             var token = Configuration.GetSection ("TokenManagement").Get<TokenSetting> ();
 
             services.AddHttpContextAccessor ();
+            services.AddSession (opt => {
+                opt.IdleTimeout = TimeSpan.FromMinutes (30);
+            });
 
             // dependency injection service
             var dIConfig = new DIConfig ();
@@ -55,7 +57,9 @@ namespace CariBengkel.Website {
                 .AddUnitOfWork<AppDbContext> ();
 
             // depedency injection auto mapper
-            services.AddAutoMapper (typeof (MapperProfile));
+            services.AddAutoMapper ((serviceProvider, cfg) => {
+                cfg.AddCollectionMappers ();
+            }, typeof (MapperProfile));
 
             // jwt auth
             services.AddAuthentication (JwtBearerDefaults.AuthenticationScheme)
@@ -95,6 +99,10 @@ namespace CariBengkel.Website {
 
             CultureInfo.CurrentCulture = new CultureInfo ("id-ID", false);
             CultureInfo.CurrentUICulture = new CultureInfo ("id-ID", false);
+
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            };
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -112,6 +120,7 @@ namespace CariBengkel.Website {
             app.UseStaticFiles ();
             app.UseCookiePolicy ();
             app.UseAuthentication ();
+            app.UseSession ();
 
             app.UseMvc (routes => {
                 routes.MapRoute (

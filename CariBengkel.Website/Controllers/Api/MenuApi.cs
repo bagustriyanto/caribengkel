@@ -45,7 +45,7 @@ namespace CariBengkel.Website.Controllers.Api {
         [HttpDelete]
         public IActionResult Delete (long id) {
             if (id == 0)
-                return BadRequest ("Id Not found");
+                return NotFound ();
 
             var result = _menuService.Delete (id);
             result.Message = _localizer[result.Message].Value;
@@ -56,7 +56,7 @@ namespace CariBengkel.Website.Controllers.Api {
         [HttpGet ("{id}")]
         public IActionResult Get (MenuViewModel model) {
             if (model.Id == 0)
-                return BadRequest ("Id Not found");
+                return NotFound ();
 
             var userModel = _mapper.Map<Menu> (model);
             var result = _menuService.Get (userModel);
@@ -66,8 +66,6 @@ namespace CariBengkel.Website.Controllers.Api {
         }
 
         [HttpGet]
-        [ProducesResponseType (StatusCodes.Status200OK)]
-        [ProducesResponseType (StatusCodes.Status404NotFound)]
         public IActionResult GetAll (string title, int limit = 10, int index = 0) {
             if (index != 0)
                 index--;

@@ -3,15 +3,17 @@ using System;
 using CariBengkel.Repository.Entity.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace CariBengkel.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191130170327_CredentialAddPublicUserColumn")]
+    partial class CredentialAddPublicUserColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -168,17 +170,17 @@ namespace CariBengkel.Repository.Migrations
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<long>("MenuId")
-                        .HasColumnName("menu_id");
+                    b.Property<long>("IdMenu")
+                        .HasColumnName("id_menu");
 
-                    b.Property<long>("RoleId")
-                        .HasColumnName("role_id");
+                    b.Property<long>("IdRole")
+                        .HasColumnName("id_role");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MenuId");
+                    b.HasIndex("IdMenu");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("IdRole");
 
                     b.ToTable("menu_role_map");
                 });
@@ -698,14 +700,14 @@ namespace CariBengkel.Repository.Migrations
 
             modelBuilder.Entity("CariBengkel.Repository.Entity.Model.MenuRoleMap", b =>
                 {
-                    b.HasOne("CariBengkel.Repository.Entity.Model.Menu", "Menu")
+                    b.HasOne("CariBengkel.Repository.Entity.Model.Menu", "IdMenuNavigation")
                         .WithMany("MenuRoleMap")
-                        .HasForeignKey("MenuId")
+                        .HasForeignKey("IdMenu")
                         .HasConstraintName("menu_role_map_fk");
 
-                    b.HasOne("CariBengkel.Repository.Entity.Model.Role", "Role")
+                    b.HasOne("CariBengkel.Repository.Entity.Model.Role", "IdRoleNavigation")
                         .WithMany("MenuRoleMap")
-                        .HasForeignKey("RoleId")
+                        .HasForeignKey("IdRole")
                         .HasConstraintName("menu_role_map_fk_1");
                 });
 
