@@ -39,7 +39,8 @@ namespace CariBengkel.Website.Controllers.Api {
 
             var claims = new [] {
                 new Claim (ClaimTypes.Name, result.Data.Username),
-                new Claim (ClaimTypes.Role, result.Data.RoleMap.FirstOrDefault ().Role.Name)
+                new Claim (ClaimTypes.Role, result.Data.RoleMap.FirstOrDefault ().Role.Name),
+                new Claim (ClaimTypes.UserData, JsonConvert.SerializeObject (result.Data))
             };
 
             var identity = new ClaimsIdentity (claims, "login");
@@ -47,7 +48,6 @@ namespace CariBengkel.Website.Controllers.Api {
             ClaimsPrincipal principal = new ClaimsPrincipal (identity);
 
             await AuthenticationHttpContextExtensions.SignInAsync (HttpContext, CookieAuthenticationDefaults.AuthenticationScheme, principal);
-            HttpContext.Session.SetString ("user", JsonConvert.SerializeObject (result.Data));
 
             result.Message = _localizer[result.Message].Value;
             result.Data = null;

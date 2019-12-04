@@ -29,7 +29,7 @@ namespace CariBengkel.Domain.Services {
                 if (!string.IsNullOrEmpty (model.Username))
                     predicate = x => x.Username.Equals (model.Username) || x.Email.Equals (model.Username);
 
-                var credential = await _unitOfWork.GetRepositoryAsync<Credentials> ().SingleAsync (predicate, include : src => src.Include (c => c.RoleMap).ThenInclude (r => r.Role));
+                var credential = await _unitOfWork.GetRepositoryAsync<Credentials> ().SingleAsync (predicate, include : src => src.Include (c => c.RoleMap).ThenInclude (r => r.Role).ThenInclude (m => m.MenuRoleMap).ThenInclude (m => m.Menu).ThenInclude (m => m.InverseParentNavigation));
 
                 if (credential == null)
                     throw new Exception ("ERROR-0003");

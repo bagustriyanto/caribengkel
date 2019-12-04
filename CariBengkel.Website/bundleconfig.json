@@ -1,15 +1,6 @@
 [
     {
-        "outputFileName": "wwwroot/css/site.min.css",
-        "inputFiles": [
-            "wwwroot/modules/bootstrap/css/bootstrap.min.css",
-            "wwwroot/modules/fontawesome/css/all.min.css",
-            "wwwroot/css/style.css",
-            "wwwroot/css/components.css"
-        ]
-    },
-    {
-        "outputFileName": "wwwroot/js/site.min.js",
+        "outputFileName": "wwwroot/js/app.min.js",
         "inputFiles": [
             "wwwroot/modules/jquery.min.js",
             "wwwroot/modules/popper.js",
@@ -23,24 +14,12 @@
             "wwwroot/modules/sweetalert/sweetalert.min.js",
             "wwwroot/modules/vuelidate.min.js",
             "wwwroot/modules/validators.min.js",
-            "wwwroot/js/stisla.js",
-            "wwwroot/js/common.js"
+            "wwwroot/modules/vuejs-paginate.js",
+            "wwwroot/js/stisla.js"
         ],
         "minify": {
             "enabled": true,
             "renameLocals": true
-        },
-        "sourceMap": false
-    },
-    {
-        "outputFileName": "wwwroot/js/master/user.min.js",
-        "inputFiles": [
-            "wwwroot/js/apps/master/user.js"
-        ],
-        "minify": {
-            "enabled": true,
-            "renameLocals": true
-        },
-        "sourceMap": false
+        }
     }
 ]

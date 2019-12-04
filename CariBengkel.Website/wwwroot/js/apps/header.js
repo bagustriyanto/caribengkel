@@ -1,5 +1,8 @@
 const header = new Vue({
     el: '#header',
+    data: {
+        username: $cookies.get("username")
+    },
     methods: {
         logout: function () {
             axios.post('/auth/logout')
@@ -19,4 +22,8 @@ const header = new Vue({
                 });
         }
     }
+});
+
+const menuNav = new Vue({
+    el: '#menu-navbar'
 })

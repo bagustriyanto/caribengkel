@@ -44,8 +44,10 @@ namespace CariBengkel.Website {
             var token = Configuration.GetSection ("TokenManagement").Get<TokenSetting> ();
 
             services.AddHttpContextAccessor ();
+            services.AddDistributedMemoryCache ();
             services.AddSession (opt => {
                 opt.IdleTimeout = TimeSpan.FromMinutes (30);
+                opt.Cookie.IsEssential = true;
             });
 
             // dependency injection service
@@ -125,13 +127,13 @@ namespace CariBengkel.Website {
             app.UseMvc (routes => {
                 routes.MapRoute (
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Backoffice}/{action=Index}/{id?}");
                 routes.MapRoute (
                     name: "api",
                     template: "api/{controller=Home}/{action=Index}/{id?}"
                 );
                 routes.MapRoute (
-                    name: "backoffice",
+                    name: "system",
                     template: "system/{controller=Backoffice}/{action=Index}/{id?}"
                 );
             });
