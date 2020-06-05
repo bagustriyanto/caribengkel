@@ -45,6 +45,7 @@
     "action_view": "Lihat",
     "action_delete_all": "Hapus semua",
     "action_delete": "Hapus",
+    "action_logout": "Keluar",
     "status_active": "Aktif",
     "status_inactive": "Non Aktif",
     "lblmenu_master": "Master Data",
